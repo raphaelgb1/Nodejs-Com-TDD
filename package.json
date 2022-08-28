@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": " node_modules/.bin/jest",
+    "test": " node_modules/.bin/jest --passWithNoTests",
     "prepare": "husky install",
-    "test:staged": "node_modules/.bin/jest"
+    "test:staged": "node_modules/.bin/jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
