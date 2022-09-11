@@ -1,5 +1,6 @@
 import { InvalidParamError } from '../errors/invalidParamError'
 import { MissingParamError } from '../errors/missingParamError'
+import { ServerError } from '../errors/serverError'
 import { badRequest } from '../helper/httpHelper'
 import { Controller } from '../protocols/controller'
 import { EmailValidator } from '../protocols/emailValidator'
@@ -12,15 +13,20 @@ export class SignUpController implements Controller {
   }
 
   handle (httpRequest: HttpRequest): any {
-    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
-    for (const element of requiredFields) {
-      if (!httpRequest.body[element]) {
-        return badRequest(new MissingParamError(element))
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+      for (const element of requiredFields) {
+        if (!httpRequest.body[element]) {
+          return badRequest(new MissingParamError(element))
+        }
       }
-    }
-    const invalid = this.emailValidator.isValid(httpRequest.body.email)
-    if (!invalid) {
-      return badRequest(new InvalidParamError('email'))
+      const invalid = this.emailValidator.isValid(httpRequest.body.email)
+      if (!invalid) {
+        return badRequest(new InvalidParamError('email'))
+      }
+    } catch (err) {
+      return { statusCode: 500, body: new ServerError() }
     }
   }
 }
