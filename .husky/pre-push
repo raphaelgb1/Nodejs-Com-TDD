@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. node_modules/husky/husky.sh
+
+npm run test:ci

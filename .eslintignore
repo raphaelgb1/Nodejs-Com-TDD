@@ -3,3 +3,4 @@ node_modules
 jest.config.ts
 jest-unit-config.ts
 jest-integration-config.ts
+coverage
