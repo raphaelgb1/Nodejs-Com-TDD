@@ -1,7 +1,7 @@
 /* eslint-disable padded-blocks */
 import { MissingParamError, InvalidParamError } from '../errors'
 import { badRequest, responseOk, serverError } from '../helper/httpHelper'
-import { HttpRequest, EmailValidator, Controller, AddAccount } from './signup-protocols'
+import { HttpRequest, EmailValidator, Controller, AddAccount, HttpResponse } from './signup-protocols'
 
 export class SignUpController implements Controller {
 
@@ -13,7 +13,7 @@ export class SignUpController implements Controller {
     this.addAccount = addAccount
   }
 
-  handle (httpRequest: HttpRequest): any {
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
 
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
@@ -33,7 +33,7 @@ export class SignUpController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
 
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         email,
         password
