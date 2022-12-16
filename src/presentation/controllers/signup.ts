@@ -1,6 +1,6 @@
 /* eslint-disable padded-blocks */
 import { MissingParamError, InvalidParamError } from '../errors'
-import { badRequest, serverError } from '../helper/httpHelper'
+import { badRequest, responseOk, serverError } from '../helper/httpHelper'
 import { HttpRequest, EmailValidator, Controller, AddAccount } from './signup-protocols'
 
 export class SignUpController implements Controller {
@@ -39,10 +39,7 @@ export class SignUpController implements Controller {
         password
       })
 
-      return {
-        statusCode: 200,
-        body: account
-      }
+      return responseOk(account)
 
     } catch (err) {
       return serverError()
