@@ -14,5 +14,17 @@ export const MongoHelper = {
     async getCollection (name: string): Promise<Collection> {
         const result = await this.client.db().collection(name)
         return result
+    },
+
+    mapper (value: any) {
+        const result: any = {}
+        for (const element of Object.entries({ ...value })) {
+            if (element[0] === '_id') {
+                result.id = String(value?._id)
+                continue
+            }
+            result[element[0]] = element[1]
+        }
+        return result
     }
 }
