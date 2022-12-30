@@ -9,10 +9,14 @@ export const MongoHelper = {
 
     async close (): Promise<void> {
         await this.client.close()
+        this.client = null as any
     },
 
     async getCollection (name: string): Promise<Collection> {
-        const result = await this.client.db().collection(name)
+        if (!this.client) {
+            await this.open(String(process.env.MONGO_URL))
+        }
+        const result = this.client.db().collection(name)
         return result
     },
 
