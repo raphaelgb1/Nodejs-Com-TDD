@@ -1,5 +1,13 @@
+import { AccountModel } from '../../../../domain/models/account'
 import { MongoHelper } from '../helpers/mongodb-helper'
 import { AccountMongoRepository } from './account'
+
+const makeFakeAccount = (): AccountModel => ({
+    id: 'valid_id',
+    name: 'any_name',
+    email: 'any_email@email.com',
+    password: 'any_password'
+})
 
 describe('Account Mongo Repository', () => {
     beforeAll(async () => {
@@ -21,16 +29,12 @@ describe('Account Mongo Repository', () => {
 
     test('Should return an account on success', async () => {
         const sut = makeSut()
-        const account = await sut.add({
-            name: 'any_name',
-            email: 'any_email',
-            password: 'any_password'
-        })
+        const account = await sut.add(makeFakeAccount())
 
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe('any_name')
-    expect(account.email).toBe('any_email')
+    expect(account.email).toBe('any_email@email.com')
     expect(account.password).toBe('any_password')
     })
 })
