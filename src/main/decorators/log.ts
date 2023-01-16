@@ -12,7 +12,7 @@ export default class LogControllerDecorator implements Controller {
 
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
         const httpResponse = await this.controller.handle(httpRequest)
-        if (httpResponse.statusCode === 500) {
+        if ([500, 400].includes(httpResponse.statusCode)) {
             await this.logErrorRepository.logError(httpResponse.body.stack)
         }
         return httpResponse
