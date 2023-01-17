@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/return-await */
 import { Authentication } from "../../../domain/useCases/authentication"
 import { InvalidParamError, MissingParamError } from "../../errors"
-import { badRequest, serverError, unauthorized } from "../../helper/httpHelper"
+import { badRequest, responseOk, serverError, unauthorized } from "../../helper/httpHelper"
 import { Controller, EmailValidator, HttpRequest } from "../signup-protocols"
 
 export class LoginController implements Controller {
@@ -17,6 +17,7 @@ export class LoginController implements Controller {
         try {
             const { email, password } = httpRequest.body
             const param = email ? 'email' : 'password'
+            const accessToken = await this.authentication.auth(email, password)
 
             if (!this.emailValidator.isValid(email)) {
                 return badRequest(new InvalidParamError(param))
@@ -26,10 +27,11 @@ export class LoginController implements Controller {
                 return badRequest(new MissingParamError(param))
             }
 
-            const validLogin = await this.authentication.auth(email, password)
-            if (!validLogin) {
+            if (!accessToken) {
                 return unauthorized()
             }
+
+            return responseOk({ accessToken })
         } catch (error) {
             return serverError(error)
         }
