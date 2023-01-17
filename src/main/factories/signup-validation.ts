@@ -4,7 +4,8 @@ import { ValidationComposite } from "../../presentation/helper/validators/valida
 
 export const makeSignUpValidation = (): Validation => {
     const validation: Validation[] = []
-    for (const field of ['name', 'email']) {
+    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+    for (const field of requiredFields) {
         validation.push(new RequiredFieldValidation(field))
     }
     return new ValidationComposite(validation)

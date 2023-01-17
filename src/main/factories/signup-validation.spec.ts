@@ -8,7 +8,8 @@ jest.mock("../../presentation/helper/validators/validation-composite")
 describe('SignUpValidation Factory', () => {
     test('Should call Validation Composite with all validations', () => {
         const validation: Validation[] = []
-        for (const field of ['name', 'email']) {
+        const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+        for (const field of requiredFields) {
             validation.push(new RequiredFieldValidation(field))
         }
         makeSignUpValidation()
