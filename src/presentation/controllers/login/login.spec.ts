@@ -1,6 +1,6 @@
 import { Authentication } from "../../../domain/useCases/authentication"
 import { InvalidParamError, MissingParamError } from "../../errors"
-import { badRequest, serverError } from "../../helper/httpHelper"
+import { badRequest, serverError, unauthorized } from "../../helper/httpHelper"
 import { EmailValidator, HttpResponse } from "../signup-protocols"
 import { LoginController } from "./login"
 
@@ -98,5 +98,12 @@ describe('Login Controller', () => {
         const authSpy = jest.spyOn(authenticationStub, 'auth')
         await sut.handle(makeFakeRequest(2))
         expect(authSpy).toHaveBeenCalledWith('any_email@gmail.com', 'any_password')
+    })
+
+    test('Should return 400 if an invalid credentials are provided', async () => {
+        const { sut, authenticationStub } = makeSut()
+        jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve('')))
+        const httpResponse = await sut.handle(makeFakeRequest(2))
+        expect(httpResponse).toEqual(unauthorized())
     })
 })
