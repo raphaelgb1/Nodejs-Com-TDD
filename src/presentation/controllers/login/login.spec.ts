@@ -1,3 +1,4 @@
+import { Authentication } from "../../../domain/useCases/authentication"
 import { InvalidParamError, MissingParamError } from "../../errors"
 import { badRequest, serverError } from "../../helper/httpHelper"
 import { EmailValidator, HttpResponse } from "../signup-protocols"
@@ -6,6 +7,7 @@ import { LoginController } from "./login"
 interface SutTypes {
     sut: LoginController
     emailValidatorStub: EmailValidator
+    authenticationStub: Authentication
 }
 
 const makeEmailValidator = (): EmailValidator => {
@@ -18,18 +20,30 @@ const makeEmailValidator = (): EmailValidator => {
     return new EmailValidatorStub()
 }
 
+const makeAuthentication = (): Authentication => {
+    class AuthenticationStub implements Authentication {
+        async auth (email: string, password: string): Promise<string> {
+            return await new Promise(resolve => resolve('any_token'))
+        }
+    }
+
+    return new AuthenticationStub()
+}
+
 const makeSut = (): SutTypes => {
     const emailValidatorStub = makeEmailValidator()
-    const sut = new LoginController(emailValidatorStub)
+    const authenticationStub = makeAuthentication()
+    const sut = new LoginController(emailValidatorStub, authenticationStub)
     return {
         sut,
-        emailValidatorStub
+        emailValidatorStub,
+        authenticationStub
     }
 }
 
 const makeFakeRequest = (type: number): any => {
     const email = 'any_email@gmail.com'
-    const password = 'any_email@gmail.com'
+    const password = 'any_password'
     if (type === 0) {
         return { body: { email } }
     } else if (type === 1) {
@@ -46,35 +60,27 @@ const makeBadRequest = (type: boolean, error: string): HttpResponse => {
 describe('Login Controller', () => {
     test('Should return 400 if no email is provided', async () => {
         const { sut } = makeSut()
-        const httpRequest = makeFakeRequest(0)
-
-        const httpResponse = await sut.handle(httpRequest)
+        const httpResponse = await sut.handle(makeFakeRequest(0))
         expect(httpResponse).toEqual(makeBadRequest(true, 'email'))
     })
 
     test('Should return 400 if no password is provided', async () => {
         const { sut } = makeSut()
-        const httpRequest = makeFakeRequest(1)
-
-        const httpResponse = await sut.handle(httpRequest)
+        const httpResponse = await sut.handle(makeFakeRequest(1))
         expect(httpResponse).toEqual(makeBadRequest(true, 'password'))
     })
 
-    test('Should return 400 if no password is provided', async () => {
+    test('Should call Email Validator with correct email', async () => {
         const { sut, emailValidatorStub } = makeSut()
         const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-        const httpRequest = makeFakeRequest(2)
-
-        await sut.handle(httpRequest)
+        await sut.handle(makeFakeRequest(2))
         expect(isValidSpy).toHaveBeenCalledWith('any_email@gmail.com')
     })
 
     test('Should return 400 if invalid email is provided', async () => {
         const { sut, emailValidatorStub } = makeSut()
         jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-        const httpRequest = makeFakeRequest(2)
-
-        const httpResponse = await sut.handle(httpRequest)
+        const httpResponse = await sut.handle(makeFakeRequest(2))
         expect(httpResponse).toEqual(makeBadRequest(false, 'email'))
     })
 
@@ -83,9 +89,14 @@ describe('Login Controller', () => {
         jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
             throw new Error()
         })
-        const httpRequest = makeFakeRequest(2)
-
-        const httpResponse = await sut.handle(httpRequest)
+        const httpResponse = await sut.handle(makeFakeRequest(2))
         expect(httpResponse).toEqual(serverError(new Error()))
+    })
+
+    test('Should call Authentication with correct values', async () => {
+        const { sut, authenticationStub } = makeSut()
+        const authSpy = jest.spyOn(authenticationStub, 'auth')
+        await sut.handle(makeFakeRequest(2))
+        expect(authSpy).toHaveBeenCalledWith('any_email@gmail.com', 'any_password')
     })
 })
