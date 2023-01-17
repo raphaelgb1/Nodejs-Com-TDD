@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/return-await */
-import { MissingParamError } from "../../errors"
+import { InvalidParamError, MissingParamError } from "../../errors"
 import { badRequest } from "../../helper/httpHelper"
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from "../signup-protocols"
 
@@ -11,8 +11,11 @@ export class LoginController implements Controller {
     }
 
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-        this.emailValidator.isValid(httpRequest.body?.email)
         const param = httpRequest.body.email ? 'email' : 'password'
+        const isValid = this.emailValidator.isValid(httpRequest.body?.email)
+        if (!isValid) {
+            return new Promise(resolve => resolve(badRequest(new InvalidParamError(param))))
+        }
         return new Promise(resolve => resolve(badRequest(new MissingParamError(param))))
     }
 }
