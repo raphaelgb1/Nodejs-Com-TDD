@@ -28,12 +28,14 @@ const makeSut = (): SutTypes => {
 }
 
 const makeRequest = (type: number): any => {
+    const email = 'any_email@gmail.com'
+    const password = 'any_email@gmail.com'
     if (type === 0) {
-        return { body: { email: 'any_email@gmail.com' } }
+        return { body: { email } }
     } else if (type === 1) {
-        return { body: { password: 'any_password' } }
+        return { body: { password } }
     } else {
-        return { body: { email: 'any_email@gmail.com', password: 'any_password' } }
+        return { body: { email, password } }
     }
 }
 

@@ -11,9 +11,9 @@ export class LoginController implements Controller {
     }
 
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-        const param = httpRequest.body.email ? 'email' : 'password'
-        const isValid = this.emailValidator.isValid(httpRequest.body?.email)
-        if (!isValid) {
+        const { email } = httpRequest.body
+        const param = email ? 'email' : 'password'
+        if (!this.emailValidator.isValid(email)) {
             return new Promise(resolve => resolve(badRequest(new InvalidParamError(param))))
         }
         return new Promise(resolve => resolve(badRequest(new MissingParamError(param))))
