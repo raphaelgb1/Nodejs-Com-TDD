@@ -1,16 +1,12 @@
 /* eslint-disable padded-blocks */
-import { InvalidParamError } from '../../errors'
 import { badRequest, responseOk, serverError } from '../../helper/httpHelper'
-import { HttpRequest, EmailValidator, Controller, AddAccount, HttpResponse, Validation } from './signup-protocols'
+import { HttpRequest, Controller, AddAccount, HttpResponse, Validation } from './signup-protocols'
 
 export class SignUpController implements Controller {
-
-  private readonly emailValidator: EmailValidator
   private readonly addAccount: AddAccount
   private readonly validation: Validation
 
-  constructor (emailValidator: EmailValidator, addAccount: AddAccount, validation: Validation) {
-    this.emailValidator = emailValidator
+  constructor (addAccount: AddAccount, validation: Validation) {
     this.addAccount = addAccount
     this.validation = validation
   }
@@ -22,23 +18,8 @@ export class SignUpController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      // const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
-      // for (const element of requiredFields) {
-      //   if (!httpRequest.body[element]) {
-      //     return badRequest(new MissingParamError(element))
-      //   }
-      // }
 
-      const { name, email, password, passwordConfirmation } = httpRequest.body
-      if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('passwordConfirmation'))
-      }
-
-      const invalid = this.emailValidator.isValid(email)
-      if (!invalid) {
-        return badRequest(new InvalidParamError('email'))
-      }
-
+      const { name, email, password } = httpRequest.body
       const account = await this.addAccount.add({
         name,
         email,
@@ -46,7 +27,6 @@ export class SignUpController implements Controller {
       })
 
       return responseOk(account)
-
     } catch (error) {
       return serverError(error)
     }
