@@ -2,7 +2,7 @@
 import { Authentication } from "../../../domain/useCases/authentication"
 import { InvalidParamError, MissingParamError } from "../../errors"
 import { badRequest, responseOk, serverError, unauthorized } from "../../helper/httpHelper"
-import { Controller, EmailValidator, HttpRequest } from "../signup-protocols"
+import { Controller, EmailValidator, HttpRequest } from "../signup/signup-protocols"
 
 export class LoginController implements Controller {
     private readonly emailValidator: EmailValidator

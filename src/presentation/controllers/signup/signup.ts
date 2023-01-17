@@ -1,6 +1,6 @@
 /* eslint-disable padded-blocks */
-import { MissingParamError, InvalidParamError } from '../errors'
-import { badRequest, responseOk, serverError } from '../helper/httpHelper'
+import { MissingParamError, InvalidParamError } from '../../errors'
+import { badRequest, responseOk, serverError } from '../../helper/httpHelper'
 import { HttpRequest, EmailValidator, Controller, AddAccount, HttpResponse } from './signup-protocols'
 
 export class SignUpController implements Controller {

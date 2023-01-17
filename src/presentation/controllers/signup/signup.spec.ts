@@ -1,8 +1,8 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamError } from '../errors'
-import { ServerError } from '../errors/serverError'
+import { MissingParamError, InvalidParamError } from '../../errors'
+import { ServerError } from '../../errors/serverError'
 import { EmailValidator, AccountModel, AddAccount, AddAccountModel, HttpRequest } from './signup-protocols'
-import { responseOk, serverError, badRequest } from '../helper/httpHelper'
+import { responseOk, serverError, badRequest } from '../../helper/httpHelper'
 
 const MakeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -192,4 +192,12 @@ describe('SignUp Controller', () => {
       const httpResponse = await sut.handle(httpRequest)
       expect(httpResponse).toEqual(responseOk(makeFakeAccount()))
     })
+
+    // test('Should call Validation with correct value', async () => {
+    //   const { sut, validationStub } = MakeSut()
+    //   const addSpy =
+    //   const httpRequest = makeFakeRequest()
+    //   const httpResponse = await sut.handle(httpRequest)
+    //   expect(httpResponse).toEqual(responseOk(makeFakeAccount()))
+    // })
 })
