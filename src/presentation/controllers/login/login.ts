@@ -1,32 +1,25 @@
 /* eslint-disable @typescript-eslint/return-await */
 import { Authentication } from "../../../domain/useCases/authentication"
-import { InvalidParamError, MissingParamError } from "../../errors"
 import { badRequest, responseOk, serverError, unauthorized } from "../../helper/httpHelper"
-import { Controller, EmailValidator, HttpRequest } from "../signup/signup-protocols"
+import { Controller, HttpRequest, Validation } from "../signup/signup-protocols"
 
 export class LoginController implements Controller {
-    private readonly emailValidator: EmailValidator
+    private readonly validation: Validation
     private readonly authentication: Authentication
 
-    constructor (emailValidator: EmailValidator, authentication: Authentication) {
-        this.emailValidator = emailValidator
+    constructor (authentication: Authentication, validation: Validation) {
+        this.validation = validation
         this.authentication = authentication
     }
 
     async handle (httpRequest: HttpRequest): Promise<any> {
         try {
             const { email, password } = httpRequest.body
-            const param = email ? 'email' : 'password'
             const accessToken = await this.authentication.auth(email, password)
-
-            if (!this.emailValidator.isValid(email)) {
-                return badRequest(new InvalidParamError(param))
+            const error = this.validation.validate(httpRequest.body)
+            if (error) {
+                return badRequest(error)
             }
-
-            if (!email || !password) {
-                return badRequest(new MissingParamError(param))
-            }
-
             if (!accessToken) {
                 return unauthorized()
             }
