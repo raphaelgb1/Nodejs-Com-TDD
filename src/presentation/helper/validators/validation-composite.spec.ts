@@ -1,24 +1,26 @@
-import { MissingParamError } from "../../errors"
+import { InvalidParamError, MissingParamError } from "../../errors"
 import { Validation } from "./validation"
 import { ValidationComposite } from "./validation-composite"
 
 describe('Validation Composite', () => {
     interface SutTypes {
         sut: ValidationComposite
+        validationStubs: Validation[]
     }
 
     const makeSut = (): SutTypes => {
-        const validationStub = makeValidationStub()
-        const sut = new ValidationComposite([validationStub])
+        const validationStubs = [makeValidationStub(), makeValidationStub()]
+        const sut = new ValidationComposite(validationStubs)
         return {
-            sut
+            sut,
+            validationStubs
         }
     }
 
     const makeValidationStub = (): Validation => {
         class ValidationStub implements Validation {
             validate (input: any): any {
-                return new MissingParamError('field')
+                return null
             }
         }
         return new ValidationStub()
@@ -29,8 +31,23 @@ describe('Validation Composite', () => {
     })
 
     test('Should return an error if any validation fails', () => {
-        const { sut } = makeSut()
+        const { sut, validationStubs } = makeSut()
+        jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new MissingParamError('field'))
         const error = sut.validate(makeFakeRequest())
         expect(error).toEqual(new MissingParamError('field'))
+    })
+
+    test('Should return the first error if one validation fails', () => {
+        const { sut, validationStubs } = makeSut()
+        jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new InvalidParamError('field'))
+        jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(new MissingParamError('field'))
+        const error = sut.validate(makeFakeRequest())
+        expect(error).toEqual(new InvalidParamError('field'))
+    })
+
+    test('Should not return if validation succeeds', () => {
+        const { sut } = makeSut()
+        const error = sut.validate(makeFakeRequest())
+        expect(error).toBeFalsy()
     })
 })
