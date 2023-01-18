@@ -1,5 +1,5 @@
 /* eslint-disable padded-blocks */
-import { badRequest, responseOk, serverError } from '../../helper/httpHelper'
+import { badRequest, responseOk, serverError } from '../../helper/http/httpHelper'
 import { HttpRequest, Controller, AddAccount, HttpResponse, Validation } from './signup-protocols'
 
 export class SignUpController implements Controller {

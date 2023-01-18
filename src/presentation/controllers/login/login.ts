@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/return-await */
-import { Authentication } from "../../../domain/useCases/authentication"
-import { badRequest, responseOk, serverError, unauthorized } from "../../helper/httpHelper"
+import { Authentication, AuthenticationModel } from "../../../domain/useCases/authentication"
+import { badRequest, responseOk, serverError, unauthorized } from "../../helper/http/httpHelper"
 import { Controller, HttpRequest, Validation } from "../signup/signup-protocols"
 
 export class LoginController implements Controller {
@@ -15,7 +15,8 @@ export class LoginController implements Controller {
     async handle (httpRequest: HttpRequest): Promise<any> {
         try {
             const { email, password } = httpRequest.body
-            const accessToken = await this.authentication.auth(email, password)
+            const auth: AuthenticationModel = { email, password }
+            const accessToken = await this.authentication.auth(auth)
             const error = this.validation.validate(httpRequest.body)
             if (error) {
                 return badRequest(error)
