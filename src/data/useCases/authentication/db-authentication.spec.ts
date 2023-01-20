@@ -1,6 +1,7 @@
 /* eslint-disable comma-style */
 import { AuthenticationModel } from "../../../domain/useCases/authentication"
 import { HashComparer } from "../../protocols/criptografy/hash-comparer"
+import { TokenGenerator } from "../../protocols/criptografy/tokenGenerator"
 import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository"
 import { AccountModel } from "../addAccount/db-add-account-protocols"
 import { DbAuthentication } from "./db-authentication"
@@ -10,6 +11,7 @@ describe('DB Authentication UseCase', () => {
         sut: DbAuthentication
         loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
         hashComparerStub: HashComparer
+        tokenGeneratorStub: TokenGenerator
     }
 
     const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
@@ -30,16 +32,31 @@ describe('DB Authentication UseCase', () => {
         return new HashCompareStub()
     }
 
+    const makeTokenGeneratorStub = (): TokenGenerator => {
+        class TokenGeneratorStub implements TokenGenerator {
+            async generate (id: string): Promise<string> {
+                return await new Promise(resolve => resolve(makeFakeToken().token))
+            }
+        }
+        return new TokenGeneratorStub()
+    }
+
     const makeSut = (): SutTypes => {
+        const tokenGeneratorStub = makeTokenGeneratorStub()
         const hashComparerStub = makeHashComparerStub()
         const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
-        const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub)
+        const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub)
         return {
             sut,
             loadAccountByEmailRepositoryStub,
-            hashComparerStub
+            hashComparerStub,
+            tokenGeneratorStub
         }
     }
+
+    const makeFakeToken = (): any => ({
+        token: 'any_token'
+    })
 
     const makeFakeAccount = (): AccountModel => ({
           id: 'any_id'
@@ -87,5 +104,20 @@ describe('DB Authentication UseCase', () => {
         const account = makeFakeAccount()
         await sut.auth(data)
         expect(compareSpy).toHaveBeenCalledWith(data.password, account.password)
+    })
+
+    test('Should throws if Hashcompare throw', async () => {
+        const { sut, hashComparerStub } = makeSut()
+        jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(new Promise(resolve => resolve(false)))
+        const data = makeFakeAuth()
+        const accessToken = await sut.auth(data)
+        expect(accessToken).toBeNull()
+    })
+
+    test('Should call Token Generator with correct id', async () => {
+        const { sut } = makeSut()
+        const data = makeFakeAuth()
+        const accessToken = await sut.auth(data)
+        expect(accessToken).toBe('any_token')
     })
 })
