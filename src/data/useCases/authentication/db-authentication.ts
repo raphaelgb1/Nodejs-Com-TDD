@@ -1,5 +1,4 @@
 import { Authentication, AuthenticationModel } from "../../../domain/useCases/authentication"
-import { badRequest } from "../../../presentation/helper/http/httpHelper"
 import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository"
 
 export class DbAuthentication implements Authentication {
@@ -10,10 +9,7 @@ export class DbAuthentication implements Authentication {
     }
 
     async auth (authentication: AuthenticationModel): Promise<any> {
-        const error = await this.loadAccountByEmailRepository.load(authentication.email)
-        if (error) {
-            return badRequest(new Error())
-        }
-        return 'null'
+        await this.loadAccountByEmailRepository.load(authentication.email)
+        return null
     }
 }

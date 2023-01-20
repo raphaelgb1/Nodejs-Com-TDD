@@ -48,6 +48,7 @@ describe('DB Authentication UseCase', () => {
         await sut.auth(data)
         expect(loadSpy).toHaveBeenCalledWith(data.email)
     })
+
     test('Should throw if Load Account Email Respository throws', async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut()
         jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
@@ -56,5 +57,13 @@ describe('DB Authentication UseCase', () => {
         const data = makeFakeAuth()
         const promise = sut.auth(data)
         await expect(promise).rejects.toThrow()
+    })
+
+    test('Should return null if Load Account Email Respository return null', async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+        const data = makeFakeAccount()
+        jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(null as any)
+        const accessToken = await sut.auth(data)
+        expect(accessToken).toBeNull()
     })
 })
