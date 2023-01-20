@@ -1,5 +1,5 @@
 /* eslint-disable no-trailing-spaces */
-import { Encrypter } from "../../protocols/encrypter"
+import { Encrypter } from "../../protocols/criptografy/encrypter"
 import { DBbAddAccount } from "./db-add-account"
 import { AccountModel, AddAccountModel, AddAccountRepository } from "./db-add-account-protocols"
 

@@ -1,6 +1,6 @@
 import { Authentication, AuthenticationModel } from "../../../domain/useCases/authentication"
 import { badRequest } from "../../../presentation/helper/http/httpHelper"
-import { LoadAccountByEmailRepository } from "../../protocols/load-account-by-email-repository"
+import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository"
 
 export class DbAuthentication implements Authentication {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository

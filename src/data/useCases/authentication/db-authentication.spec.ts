@@ -1,6 +1,6 @@
 /* eslint-disable comma-style */
 import { AuthenticationModel } from "../../../domain/useCases/authentication"
-import { LoadAccountByEmailRepository } from "../../protocols/load-account-by-email-repository"
+import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository"
 import { AccountModel } from "../addAccount/db-add-account-protocols"
 import { DbAuthentication } from "./db-authentication"
 
