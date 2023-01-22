@@ -1,10 +1,12 @@
 /* eslint-disable comma-style */
-import { AuthenticationModel } from "../../../domain/useCases/authentication"
-import { HashComparer } from "../../protocols/criptografy/hash-comparer"
-import { TokenGenerator } from "../../protocols/criptografy/tokenGenerator"
-import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository"
-import { UpdateAccessTokenRepository } from "../../protocols/db/update-access-token-repository"
-import { AccountModel } from "../addAccount/db-add-account-protocols"
+import {
+    AuthenticationModel,
+    HashComparer,
+    TokenGenerator,
+    LoadAccountByEmailRepository,
+    UpdateAccessTokenRepository,
+    AccountModel
+} from "./db-authentication-protocols"
 import { DbAuthentication } from "./db-authentication"
 
 describe('DB Authentication UseCase', () => {
@@ -119,7 +121,7 @@ describe('DB Authentication UseCase', () => {
         expect(compareSpy).toHaveBeenCalledWith(data.password, account.password)
     })
 
-    test('Should throws if Hashcompare throw', async () => {
+    test('Should null if Hashcompare return null', async () => {
         const { sut, hashComparerStub } = makeSut()
         jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(new Promise(resolve => resolve(false)))
         const data = makeFakeAuth()
