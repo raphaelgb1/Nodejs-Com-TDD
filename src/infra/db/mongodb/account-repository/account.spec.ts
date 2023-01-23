@@ -1,3 +1,4 @@
+import { Collection } from 'mongodb'
 import { AccountModel } from '../../../../domain/models/account'
 import { MongoHelper } from '../helpers/mongodb-helper'
 import { AccountMongoRepository } from './account'
@@ -9,6 +10,8 @@ const makeFakeAccount = (): AccountModel => ({
     password: 'any_password'
 })
 
+let accountCollection: Collection
+
 describe('Account Mongo Repository', () => {
     beforeAll(async () => {
         await MongoHelper.open(String(process.env.MONGO_URL))
@@ -19,22 +22,44 @@ describe('Account Mongo Repository', () => {
     })
 
     beforeEach(async () => {
-        const accountColleciont = await MongoHelper.getCollection('accounts')
-        await accountColleciont.deleteMany({})
+        accountCollection = await MongoHelper.getCollection('accounts')
+        await accountCollection.deleteMany({})
     })
 
     const makeSut = (): AccountMongoRepository => {
         return new AccountMongoRepository()
     }
 
-    test('Should return an account on success', async () => {
+    test('Should return an account on add success', async () => {
         const sut = makeSut()
         const account = await sut.add(makeFakeAccount())
 
-    expect(account).toBeTruthy()
-    expect(account.id).toBeTruthy()
-    expect(account.name).toBe('any_name')
-    expect(account.email).toBe('any_email@email.com')
-    expect(account.password).toBe('any_password')
+        expect(account).toBeTruthy()
+        expect(account.id).toBeTruthy()
+        expect(account.name).toBe('any_name')
+        expect(account.email).toBe('any_email@email.com')
+        expect(account.password).toBe('any_password')
+    })
+
+    test('Should return an account on load by EMAIL success', async () => {
+        const sut = makeSut()
+        await accountCollection.insertOne({
+            name: 'any_name',
+            email: 'any_email@email.com',
+            password: 'any_password'
+        })
+        const account = await sut.loadByEmail(makeFakeAccount().email)
+
+        expect(account).toBeTruthy()
+        expect(account.id).toBeTruthy()
+        expect(account.name).toBe('any_name')
+        expect(account.email).toBe('any_email@email.com')
+        expect(account.password).toBe('any_password')
+    })
+
+    test('Should return null if load by EMAIL fails', async () => {
+        const sut = makeSut()
+        const account = await sut.loadByEmail(makeFakeAccount().email)
+        expect(account).toBeFalsy()
     })
 })
