@@ -2,7 +2,7 @@
 import {
     AuthenticationModel,
     HashComparer,
-    TokenGenerator,
+    Encrypter,
     LoadAccountByEmailRepository,
     UpdateAccessTokenRepository,
     AccountModel
@@ -14,7 +14,7 @@ describe('DB Authentication UseCase', () => {
         sut: DbAuthentication
         loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
         hashComparerStub: HashComparer
-        tokenGeneratorStub: TokenGenerator
+        encrypterStub: Encrypter
         updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
     }
 
@@ -36,13 +36,13 @@ describe('DB Authentication UseCase', () => {
         return new HashCompareStub()
     }
 
-    const makeTokenGeneratorStub = (): TokenGenerator => {
-        class TokenGeneratorStub implements TokenGenerator {
-            async generate (id: string): Promise<string> {
+    const makeEncrypterStub = (): Encrypter => {
+        class EncrypterStub implements Encrypter {
+            async encrypt (value: string): Promise<string> {
                 return await new Promise(resolve => resolve(makeFakeToken().token))
             }
         }
-        return new TokenGeneratorStub()
+        return new EncrypterStub()
     }
 
     const makeUpdateAccessToken = (): UpdateAccessTokenRepository => {
@@ -56,15 +56,15 @@ describe('DB Authentication UseCase', () => {
 
     const makeSut = (): SutTypes => {
         const updateAccessTokenRepositoryStub = makeUpdateAccessToken()
-        const tokenGeneratorStub = makeTokenGeneratorStub()
+        const encrypterStub = makeEncrypterStub()
         const hashComparerStub = makeHashComparerStub()
         const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
-        const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, tokenGeneratorStub, updateAccessTokenRepositoryStub)
+        const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub, updateAccessTokenRepositoryStub)
         return {
             sut,
             loadAccountByEmailRepositoryStub,
             hashComparerStub,
-            tokenGeneratorStub,
+            encrypterStub,
             updateAccessTokenRepositoryStub
         }
     }
@@ -129,7 +129,7 @@ describe('DB Authentication UseCase', () => {
         expect(accessToken).toBeNull()
     })
 
-    test('Should call Token Generator with correct id', async () => {
+    test('Should return a Token with correct id', async () => {
         const { sut } = makeSut()
         const data = makeFakeAuth()
         const accessToken = await sut.auth(data)
