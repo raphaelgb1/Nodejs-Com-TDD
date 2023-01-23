@@ -35,4 +35,13 @@ describe('Jason Web Token Adapter', () => {
         const accessToken = await sut.encrypt(data.id)
         expect(accessToken).toBe('any_token')
     })
+
+    test('Should throw if JWT throws', async () => {
+        const { sut } = makeSut()
+        jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+            throw new Error()
+        })
+        const promise = sut.encrypt(makeObj().id)
+        await expect(promise).rejects.toThrow()
+    })
 })
