@@ -1,5 +1,5 @@
 import { MongoHelper } from '../helpers/mongodb-helper'
-import { LogMongoRepository } from './log'
+import { LogMongoRepository } from './log-mongo-repository'
 
 let errorCollection: any = null
 

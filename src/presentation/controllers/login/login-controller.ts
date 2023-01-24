@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/return-await */
 import { Authentication, AuthenticationModel } from "../../../domain/useCases/authentication"
 import { badRequest, responseOk, serverError, unauthorized } from "../../helper/http/httpHelper"
-import { Controller, HttpRequest, Validation } from "../signup/signup-protocols"
+import { Controller, HttpRequest, Validation } from "../signup/signup-controller-protocols"
 
 export class LoginController implements Controller {
-    private readonly validation: Validation
-    private readonly authentication: Authentication
-
-    constructor (authentication: Authentication, validation: Validation) {
-        this.validation = validation
-        this.authentication = authentication
-    }
+    constructor (private readonly authentication: Authentication, private readonly validation: Validation) {}
 
     async handle (httpRequest: HttpRequest): Promise<any> {
         try {
