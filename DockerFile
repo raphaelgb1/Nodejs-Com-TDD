@@ -1,4 +1,4 @@
-FROM node:18.13.0
+FROM node:16.0.0
 WORKDIR /usr/src/NODEJS-COM-TDD
 COPY ./package.json .
-RUN  npm install --production --ignore-scripts
+RUN  npm install --omit=dev

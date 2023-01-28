@@ -15,6 +15,7 @@ services:
     command: npm start
     volumes:
       - ./dist:/usr/src/NODEJS-COM-TDD/dist
+      - ./node_modules:/usr/src/NODEJS-COM-TDD/node_modules
     ports:
       - "5050:5050"
     links:
