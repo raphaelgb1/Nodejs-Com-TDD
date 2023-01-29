@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "dev": "npm run build && docker compose up -d",
+    "dev": "npm run build && docker compose up",
+    "stop": "docker compose down",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verb": "jest --passWithNoTests --runInBand --verbose",
     "test:unit": "npm test -- --watch -c jest-unit-config.ts",
@@ -36,6 +37,7 @@
     "@types/supertest": "^2.0.12",
     "@types/validator": "^13.7.10",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.49.0",
     "eslint": "^8.23.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.26.0",
@@ -60,8 +62,5 @@
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.13.0",
     "validator": "^13.7.0"
-  },
-  "engines": {
-    "node": "18.x"
   }
 }

@@ -4,3 +4,5 @@ jest.config.ts
 jest-unit-config.ts
 jest-integration-config.ts
 coverage
+docker-compose.yml
+Dockerfile

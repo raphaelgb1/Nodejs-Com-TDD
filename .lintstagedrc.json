@@ -1,4 +1,4 @@
   {
-    "*.{js, ts, tsx}": ["eslint --fix", "npm run test:staged"]
+    "*.{js, jsx, ts, tsx}": ["eslint --fix", "npm run test:staged"]
   }
   
