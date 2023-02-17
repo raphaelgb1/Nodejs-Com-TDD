@@ -1,9 +1,14 @@
 /* eslint-disable padded-blocks */
 import { badRequest, responseOk, serverError } from '../../helper/http/httpHelper'
+import { Authentication } from '../login/login-controller-protocols'
 import { HttpRequest, Controller, AddAccount, HttpResponse, Validation } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {
-  constructor (private readonly addAccount: AddAccount, private readonly validation: Validation) {}
+  constructor (
+      private readonly addAccount: AddAccount
+    , private readonly validation: Validation
+    , private readonly authentication: Authentication
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
 
@@ -19,7 +24,7 @@ export class SignUpController implements Controller {
         email,
         password
       })
-
+      await this.authentication.auth({ email, password })
       return responseOk(account)
     } catch (error) {
       return serverError(error)
