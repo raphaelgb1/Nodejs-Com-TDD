@@ -24,5 +24,14 @@
             "command": "npm run dev",
             "cwd": "${workspaceFolder}\\src\\main\\"
           },
+        {
+            "type": "node",
+            "name": "Docker Debug",
+            "request": "attach",
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/usr/src/node-com-tdd",
+            "port": 9222,
+            "restart": true
+        }
     ]
 }

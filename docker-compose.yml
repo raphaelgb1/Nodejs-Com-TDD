@@ -1,6 +1,7 @@
 version: "3"
 services:
   mongo:
+    container_name: mongo-container
     image: mongo:3
     restart: always
     volumes:
@@ -8,15 +9,17 @@ services:
     ports:
       - "27017:27017"
   api: 
-    container_name: api-container
+    container_name: node-container
     build: .
     restart: always
     image: node-com-tdd
-    command: npm start
+    command: npm run debug
     volumes:
-      - ./dist:/usr/src/NODEJS-COM-TDD/dist
-      - ./node_modules:/usr/src/NODEJS-COM-TDD/node_modules
+      - ./dist:/usr/src/node-com-tdd/dist
+      - ./node_modules:/usr/src/node-com-tdd/node_modules
+      - ./package.json:/usr/src/node-com-tdd/package.json
     ports:
       - "5050:5050"
+      - "9222:9222"
     links:
       - mongo
