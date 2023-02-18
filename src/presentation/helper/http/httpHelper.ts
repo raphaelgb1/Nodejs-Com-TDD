@@ -21,3 +21,8 @@ export const unauthorized = (): HttpResponse => ({
         statusCode: 401,
         body: new UnauthorizedError()
 })
+
+export const forbbiden = (error: Error): HttpResponse => ({
+        statusCode: 400,
+        body: error
+})

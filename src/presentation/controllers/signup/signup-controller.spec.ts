@@ -1,8 +1,8 @@
 import { SignUpController } from './signup-controller'
-import { MissingParamError } from '../../errors'
+import { EmailInUseError, MissingParamError } from '../../errors'
 import { ServerError } from '../../errors/serverError'
 import { AccountModel, AddAccount, AddAccountModel, HttpRequest, Validation } from './signup-controller-protocols'
-import { responseOk, serverError, badRequest } from '../../helper/http/httpHelper'
+import { responseOk, serverError, badRequest, forbbiden } from '../../helper/http/httpHelper'
 import { Authentication, AuthenticationModel } from '../login/login-controller-protocols'
 
 const MakeAddAccount = (): AddAccount => {
@@ -132,7 +132,15 @@ describe('SignUp Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
         throw new Error()
     })
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(serverError(new Error()))
-})
+      const httpResponse = await sut.handle(makeFakeRequest())
+      expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = MakeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve(null as any)))
+    const httpRequest = makeFakeRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(forbbiden(new EmailInUseError()))
+  })
 })

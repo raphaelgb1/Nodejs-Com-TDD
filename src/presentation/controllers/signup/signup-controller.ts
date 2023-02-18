@@ -1,5 +1,6 @@
 /* eslint-disable padded-blocks */
-import { badRequest, responseOk, serverError } from '../../helper/http/httpHelper'
+import { EmailInUseError } from '../../errors'
+import { badRequest, forbbiden, responseOk, serverError } from '../../helper/http/httpHelper'
 import { Authentication } from '../login/login-controller-protocols'
 import { HttpRequest, Controller, AddAccount, HttpResponse, Validation } from './signup-controller-protocols'
 
@@ -19,11 +20,16 @@ export class SignUpController implements Controller {
       }
 
       const { name, email, password } = httpRequest.body
-      await this.addAccount.add({
+      const addAccount = await this.addAccount.add({
         name,
         email,
         password
       })
+
+      if (!addAccount) {
+        return forbbiden(new EmailInUseError())
+      }
+
       const accessToken = await this.authentication.auth({ email, password })
       return responseOk({ accessToken })
     } catch (error) {
