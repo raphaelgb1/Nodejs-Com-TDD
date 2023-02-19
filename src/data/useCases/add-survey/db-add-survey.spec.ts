@@ -1,3 +1,4 @@
+import { serverError } from "../../../presentation/helper/http/httpHelper"
 import { DbAddSurvey } from "./db-add-survey"
 import { AddSurveyModel, AddSurveyRepository } from "./db-add-survey-protocols"
 
@@ -39,5 +40,15 @@ describe('DbAddSurvey Usecase', () => {
         const httpRequest = makeFakeSurveyData()
         await sut.add(httpRequest)
         expect(addSpy).toHaveBeenCalledWith(httpRequest)
+    })
+
+    test('Should return 500 if Add Survey Repository throws', async () => {
+        const { sut, addSurveyRepositoryStub } = makeSut()
+        jest.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(
+            new Promise((resolve, reject) => reject(new Error())
+        ))
+        const httpRequest = makeFakeSurveyData()
+        const httpResponse = await sut.add(httpRequest)
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
 })
