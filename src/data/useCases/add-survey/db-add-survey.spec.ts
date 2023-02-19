@@ -8,7 +8,7 @@ interface SutTypes {
 
 const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
     class AddSurveyRepository implements AddSurveyRepository {
-        async add (data: AddSurveyModel): Promise<void> {
+        async add (surveyData: AddSurveyModel): Promise<void> {
             return await new Promise(resolve => resolve())
         }
     }
