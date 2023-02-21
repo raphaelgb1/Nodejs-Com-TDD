@@ -53,7 +53,7 @@ describe('Add Survey Controller', () => {
         const validateSpy = jest.spyOn(validationStub, 'validate')
         const httpRequest = makeFakeSurvey()
         await sut.handle(httpRequest)
-        expect(validateSpy).toHaveBeenCalledWith(httpRequest)
+        expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
     })
 
     test('Should return 400 if Validation Fails', async () => {
