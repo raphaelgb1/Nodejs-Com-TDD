@@ -1,7 +1,7 @@
 import { AccountModel } from "../../domain/models/account"
 import { LoadAccountByToken } from "../../domain/useCases/load-account-by-token"
 import { AccessDeniedError } from "../errors/access-denial-error"
-import { forbbiden } from "../helper/http/httpHelper"
+import { forbbiden, responseOk } from "../helper/http/httpHelper"
 import { HttpRequest } from "../protocols"
 import { AuthMiddleware } from "./auth-middleware"
 
@@ -35,10 +35,10 @@ const makeFakeRequest = (): HttpRequest => ({
 })
 
 const makeFakeAccount = (): AccountModel => ({
-    id: "string",
-    name: "string",
-    email: "string",
-    password: "string"
+    id: "valid_id",
+    name: "valid-name",
+    email: "valid_email@gmail.com",
+    password: "valid_password"
 })
 
 describe('Auth Middleware Presentation', () => {
@@ -61,5 +61,12 @@ describe('Auth Middleware Presentation', () => {
         jest.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(Promise.resolve(null as any))
         const httpResponse = await sut.handle({})
         expect(httpResponse).toEqual(forbbiden(new AccessDeniedError()))
+    })
+
+    test('Should return 200 if LoadAccountByToken returns an account', async () => {
+        const { sut } = makeSut()
+        const httpRequest = makeFakeRequest()
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual(responseOk(makeFakeAccount().id))
     })
 })
