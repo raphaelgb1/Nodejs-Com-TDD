@@ -1,9 +1,8 @@
 import { AccountModel } from "../../domain/models/account"
-import { LoadAccountByToken } from "../../domain/useCases/load-account-by-token"
 import { AccessDeniedError } from "../errors/access-denial-error"
 import { forbbiden, responseOk, serverError } from "../helper/http/httpHelper"
-import { HttpRequest } from "../protocols"
 import { AuthMiddleware } from "./auth-middleware"
+import { HttpRequest, LoadAccountByToken } from './auth-middleware.protocols'
 
 interface SutTypes {
     sut: AuthMiddleware

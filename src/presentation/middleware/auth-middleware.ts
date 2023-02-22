@@ -1,7 +1,6 @@
-import { LoadAccountByToken } from "../../domain/useCases/load-account-by-token"
 import { AccessDeniedError } from "../errors/access-denial-error"
 import { forbbiden, responseOk, serverError } from "../helper/http/httpHelper"
-import { Controller, HttpRequest, HttpResponse } from "../protocols"
+import { Controller, HttpRequest, HttpResponse, LoadAccountByToken } from "./auth-middleware.protocols"
 
 export class AuthMiddleware implements Controller {
     constructor (
