@@ -84,10 +84,8 @@ describe('Db Load Account by Token UseCase', () => {
 
     // test('Should return null if Load by Account by Token Repository returns null', async () => {
     //     const { sut, decrypterStub } = makeSut()
-    //     jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(async () => {
-    //         return await Promise.reject(new Error())
-    //     })
+    //     jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => { throw new Error() })
     //     const promise = await sut.load('any_token', role)
-    //     await expect(promise).rejects.toThrow()
+    //     expect(promise).toThrow()
     // })
 })
