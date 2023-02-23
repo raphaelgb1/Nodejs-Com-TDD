@@ -56,5 +56,14 @@ describe('Jason Web Token Adapter', () => {
             const accessToken = await sut.decrypt('any_token')
             expect(accessToken).toBe('any_token')
         })
+
+        test('Should throw if verify thows', async () => {
+            const sut = makeSut()
+            jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+                throw new Error()
+            })
+            const promise = sut.decrypt('any_token')
+            await expect(promise).rejects.toThrow()
+        })
     })
 })
