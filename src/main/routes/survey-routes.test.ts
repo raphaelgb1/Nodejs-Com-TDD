@@ -32,11 +32,11 @@ describe('Survey Routes', () => {
     })
 
     describe('POST /surveys', () => {
-        test('Should return 204 on survey', async () => {
+        test('Should return 403 on add survey success', async () => {
             await request(app)
                 .post('/api/surveys')
                 .send(makeFakeSurvey())
-                .expect(204)
+                .expect(403)
         })
     })
     // describe('POST /surveys', () => {

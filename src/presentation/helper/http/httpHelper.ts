@@ -23,7 +23,7 @@ export const unauthorized = (): HttpResponse => ({
 })
 
 export const forbbiden = (error: Error): HttpResponse => ({
-        statusCode: 400,
+        statusCode: 403,
         body: error
 })
 
