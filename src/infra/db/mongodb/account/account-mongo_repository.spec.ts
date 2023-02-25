@@ -12,6 +12,8 @@ const makeFakeAccount = (): AccountModel => ({
 
 let accountCollection: Collection
 
+const role = 'any_role'
+
 describe('Account Mongo Repository', () => {
     beforeAll(async () => {
         await MongoHelper.open(String(process.env.MONGO_URL))
@@ -80,6 +82,43 @@ describe('Account Mongo Repository', () => {
             const account = await accountCollection.findOne({ _id: result.insertedId }) as any
             expect(account).toBeTruthy()
             expect(account.accessToken).toBe('any_token')
+        })
+    })
+
+    describe('Load By Token - Account Mongo Repository', () => {
+        test('Should return an account on load by TOKEN success withou role', async () => {
+            const sut = makeSut()
+            await accountCollection.insertOne({
+                name: 'any_name',
+                email: 'any_email@email.com',
+                password: 'any_password',
+                accessToken: 'any_token'
+            })
+            const account = await sut.loadByToken('any_token')
+
+            expect(account).toBeTruthy()
+            expect(account.id).toBeTruthy()
+            expect(account.name).toBe('any_name')
+            expect(account.email).toBe('any_email@email.com')
+            expect(account.password).toBe('any_password')
+        })
+
+        test('Should return an account on load by TOKEN success with role', async () => {
+            const sut = makeSut()
+            await accountCollection.insertOne({
+                name: 'any_name',
+                email: 'any_email@email.com',
+                password: 'any_password',
+                accessToken: 'any_token',
+                role
+            })
+            const account = await sut.loadByToken('any_token', role)
+
+            expect(account).toBeTruthy()
+            expect(account.id).toBeTruthy()
+            expect(account.name).toBe('any_name')
+            expect(account.email).toBe('any_email@email.com')
+            expect(account.password).toBe('any_password')
         })
     })
 })
