@@ -5,6 +5,6 @@ import { makeAddSurveyController } from "../factories/controllers/survey/add-sur
 import { makeAuthMiddleware } from "../factories/middlewares/auth-middleware-factory"
 
 export default async (router: Router): Promise<void> => {
-    const adminAuth = await adaptMiddleware(makeAuthMiddleware('admin'))
+    const adminAuth = await adaptMiddleware(makeAuthMiddleware())
     router.post('/surveys', adminAuth, (await adaptRoute(makeAddSurveyController())))
 }

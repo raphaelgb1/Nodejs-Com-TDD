@@ -37,14 +37,14 @@ describe('Survey Routes', () => {
     })
 
     describe('POST /surveys', () => {
-        test('Should return 403 on add survey success', async () => {
+        test('Should return 403 without any token', async () => {
             await request(app)
                 .post('/api/surveys')
                 .send(makeFakeSurvey())
                 .expect(403)
         })
 
-        test('Should return 204 on add survey success', async () => {
+        test('Should return 204 on add survey success with valid token', async () => {
             const result = await accountCollection.insertOne({
                 name: 'any_name',
                 email: 'any_email@gmail.com',

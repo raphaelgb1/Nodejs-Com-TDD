@@ -12,7 +12,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 let accountCollection: Collection
 
-const role = 'any_role'
+const role = 'admin'
 
 describe('Account Mongo Repository', () => {
     beforeAll(async () => {
@@ -86,7 +86,7 @@ describe('Account Mongo Repository', () => {
     })
 
     describe('Load By Token - Account Mongo Repository', () => {
-        test('Should return an account on load by TOKEN success withou role', async () => {
+        test('Should return an account on load by TOKEN success without ADM role', async () => {
             const sut = makeSut()
             await accountCollection.insertOne({
                 name: 'any_name',
@@ -103,7 +103,7 @@ describe('Account Mongo Repository', () => {
             expect(account.password).toBe('any_password')
         })
 
-        test('Should return an account on load by TOKEN success with role', async () => {
+        test('Should return an account on load by TOKEN success with ADM role', async () => {
             const sut = makeSut()
             await accountCollection.insertOne({
                 name: 'any_name',
@@ -113,6 +113,36 @@ describe('Account Mongo Repository', () => {
                 role
             })
             const account = await sut.loadByToken('any_token', role)
+
+            expect(account).toBeTruthy()
+            expect(account.id).toBeTruthy()
+            expect(account.name).toBe('any_name')
+            expect(account.email).toBe('any_email@email.com')
+            expect(account.password).toBe('any_password')
+        })
+
+        test('Should return null  on load by TOKEN success without a valid ADM role', async () => {
+            const sut = makeSut()
+            await accountCollection.insertOne({
+                name: 'any_name',
+                email: 'any_email@email.com',
+                password: 'any_password',
+                accessToken: 'any_token'
+            })
+            const account = await sut.loadByToken('any_token', role)
+            expect(account).toBeFalsy()
+        })
+
+        test('Should return an account on load by TOKEN if user is ADM', async () => {
+            const sut = makeSut()
+            await accountCollection.insertOne({
+                name: 'any_name',
+                email: 'any_email@email.com',
+                password: 'any_password',
+                accessToken: 'any_token',
+                role
+            })
+            const account = await sut.loadByToken('any_token')
 
             expect(account).toBeTruthy()
             expect(account.id).toBeTruthy()
