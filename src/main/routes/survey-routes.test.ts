@@ -1,10 +1,13 @@
+import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
 import { AddSurveyModel } from '../../domain/useCases/add-survey'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongodb-helper'
 import app from "../config/app"
+import env from "../config/env"
 
-let surveyColleciont: Collection
+let surveyCollection: Collection
+let accountCollection: Collection
 
 const makeFakeSurvey = (): AddSurveyModel => ({
     question: 'any_question',
@@ -27,8 +30,10 @@ describe('Survey Routes', () => {
     })
 
     beforeEach(async () => {
-        surveyColleciont = await MongoHelper.getCollection('surveys')
-        await surveyColleciont.deleteMany({})
+        surveyCollection = await MongoHelper.getCollection('surveys')
+        await surveyCollection.deleteMany({})
+        accountCollection = await MongoHelper.getCollection('accounts')
+        await accountCollection.deleteMany({})
     })
 
     describe('POST /surveys', () => {
@@ -38,32 +43,22 @@ describe('Survey Routes', () => {
                 .send(makeFakeSurvey())
                 .expect(403)
         })
-    })
-    // describe('POST /surveys', () => {
-    //     test('Should return 200 on surveys', async () => {
-    //         const password = await hash('123', parseInt(env.salt as any))
-    //         await surveyColleciont.insertOne({
-    //             name: 'any_name',
-    //             email: 'any_email@gmail.com',
-    //             password
-    //         })
-    //         await request(app)
-    //             .post('/api/surveys')
-    //             .send({
-    //                 email: 'any_email@gmail.com',
-    //                 password: '123'
-    //             })
-    //             .expect(200)
-    //     })
 
-    //     test('Should return 401 on surveys', async () => {
-    //         await request(app)
-    //             .post('/api/surveys')
-    //             .send({
-    //                 email: 'any_email@gmail.com',
-    //                 password: '123'
-    //             })
-    //             .expect(401)
-    //     })
-    // })
+        test('Should return 204 on add survey success', async () => {
+            const result = await accountCollection.insertOne({
+                name: 'any_name',
+                email: 'any_email@gmail.com',
+                password: 'any_password',
+                role: 'admin'
+            })
+            const id = result.insertedId
+            const accessToken = sign({ id }, env.jwtSecret)
+            await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+            await request(app)
+                .post('/api/surveys')
+                .set('x-access-token', accessToken)
+                .send(makeFakeSurvey())
+                .expect(204)
+        })
+    })
 })
