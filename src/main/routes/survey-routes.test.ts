@@ -17,7 +17,8 @@ const makeFakeSurvey = (): AddSurveyModel => ({
     },
     {
         answer: 'any_answer2'
-    }]
+    }],
+    date: new Date()
 })
 
 describe('Survey Routes', () => {
