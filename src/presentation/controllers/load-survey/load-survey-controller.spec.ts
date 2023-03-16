@@ -43,7 +43,7 @@ describe('Add Survey Controller', () => {
         MockDate.set(new Date())
     })
 
-    beforeAll(() => {
+    afterAll(() => {
         MockDate.reset()
     })
     test('Should call LoadSurveys', () => {
