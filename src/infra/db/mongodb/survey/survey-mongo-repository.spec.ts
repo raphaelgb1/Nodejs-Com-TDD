@@ -35,13 +35,24 @@ describe('Survey Mongo Repository', () => {
         await surveyCollection.deleteMany({})
     })
 
-    describe('Update Access Token - Account Mongo Repository', () => {
-        test('Should return an account on add success', async () => {
+    describe('Add', () => {
+        test('Should add a Survey on success', async () => {
         const sut = makeSut()
         const httpRequest = makeFakeSurvey()
         await sut.add(httpRequest)
         const survey = await surveyCollection.findOne({ question: httpRequest.question })
         expect(survey).toBeTruthy()
+        })
+    })
+
+    describe('Load All', () => {
+        test('Should load all Surveys on Success', async () => {
+            await surveyCollection.insertMany([makeFakeSurvey(), { ...makeFakeSurvey(), question: "other_question" }])
+            const sut = makeSut()
+            const surveys = await sut.loadAll()
+            expect(surveys.length).toBe(2)
+            expect(surveys[0].question).toBe('any_question')
+            expect(surveys[1].question).toBe('other_question')
         })
     })
 })
