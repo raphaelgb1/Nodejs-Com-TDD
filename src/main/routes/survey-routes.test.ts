@@ -21,6 +21,18 @@ const makeFakeSurvey = (): AddSurveyModel => ({
     date: new Date()
 })
 
+const makeAccessToken = async (): Promise<string> => {
+    const result = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'any_password',
+        role: 'admin'
+    })
+    const id = result.insertedId
+    const accessToken = sign({ id }, env.jwtSecret)
+    await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+    return accessToken
+}
 describe('Survey Routes', () => {
     beforeAll(async () => {
         await MongoHelper.open(String(process.env.MONGO_URL))
@@ -46,15 +58,7 @@ describe('Survey Routes', () => {
         })
 
         test('Should return 204 on add survey success with valid token', async () => {
-            const result = await accountCollection.insertOne({
-                name: 'any_name',
-                email: 'any_email@gmail.com',
-                password: 'any_password',
-                role: 'admin'
-            })
-            const id = result.insertedId
-            const accessToken = sign({ id }, env.jwtSecret)
-            await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+            const accessToken = await makeAccessToken()
             await request(app)
                 .post('/api/surveys')
                 .set('x-access-token', accessToken)
@@ -71,14 +75,7 @@ describe('Survey Routes', () => {
         })
 
         test('Should return 200 on load survey with valid token', async () => {
-            const result = await accountCollection.insertOne({
-                name: 'any_name',
-                email: 'any_email@gmail.com',
-                password: 'any_password'
-            })
-            const id = result.insertedId
-            const accessToken = sign({ id }, env.jwtSecret)
-            await accountCollection.updateOne({ _id: id }, { $set: { accessToken } })
+            const accessToken = await makeAccessToken()
             await request(app)
                 .get('/api/surveys')
                 .set('x-access-token', accessToken)
