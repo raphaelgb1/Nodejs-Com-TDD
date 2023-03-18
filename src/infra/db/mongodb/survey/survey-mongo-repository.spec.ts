@@ -17,7 +17,11 @@ const makeFakeSurvey = (): AddSurveyModel => ({
 
 let surveyCollection: Collection
 
-describe('Account Mongo Repository', () => {
+const makeSut = (): SurveyMongoRepository => {
+    return new SurveyMongoRepository()
+}
+
+describe('Survey Mongo Repository', () => {
     beforeAll(async () => {
         await MongoHelper.open(String(process.env.MONGO_URL))
     })
@@ -31,15 +35,13 @@ describe('Account Mongo Repository', () => {
         await surveyCollection.deleteMany({})
     })
 
-    const makeSut = (): SurveyMongoRepository => {
-        return new SurveyMongoRepository()
-    }
-
-    test('Should return an account on add success', async () => {
-       const sut = makeSut()
-       const httpRequest = makeFakeSurvey()
-       await sut.add(httpRequest)
-       const survey = await surveyCollection.findOne({ question: httpRequest.question })
-       expect(survey).toBeTruthy()
+    describe('Update Access Token - Account Mongo Repository', () => {
+        test('Should return an account on add success', async () => {
+        const sut = makeSut()
+        const httpRequest = makeFakeSurvey()
+        await sut.add(httpRequest)
+        const survey = await surveyCollection.findOne({ question: httpRequest.question })
+        expect(survey).toBeTruthy()
+        })
     })
 })
