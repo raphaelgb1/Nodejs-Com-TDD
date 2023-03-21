@@ -10,7 +10,7 @@ import {
 import { DbAuthentication } from "./db-authentication"
 
 describe('DB Authentication UseCase', () => {
-    interface SutTypes {
+    type SutTypes = {
         sut: DbAuthentication
         loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
         hashComparerStub: HashComparer

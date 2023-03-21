@@ -4,7 +4,7 @@ import { LoadAccountByEmailRepository } from "../authentication/db-authenticatio
 import { DBbAddAccount } from "./db-add-account"
 import { AccountModel, AddAccountModel, AddAccountRepository } from "./db-add-account-protocols"
 
-interface SutTypes {
+type SutTypes = {
   sut: DBbAddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository

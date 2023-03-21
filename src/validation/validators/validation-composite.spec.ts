@@ -4,7 +4,7 @@ import { Validation } from '@/presentation/protocols'
 import { ValidationComposite } from "./validation-composite"
 
 describe('Validation Composite', () => {
-    interface SutTypes {
+    type SutTypes = {
         sut: ValidationComposite
         validationStubs: Validation[]
     }

@@ -3,7 +3,7 @@ import { responseOk, serverError } from "@/presentation/helper/http/httpHelper"
 import { Controller, HttpRequest, HttpResponse } from "@/presentation/protocols"
 import LogControllerDecorator from "./log-controller-decorator"
 
-interface SutTypes {
+type SutTypes = {
     sut: LogControllerDecorator
     controllerStub: Controller
     logErrorRepositoryStub: LogErrorRepository

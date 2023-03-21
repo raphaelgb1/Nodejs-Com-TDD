@@ -3,7 +3,7 @@ import { noContent, responseOk, serverError } from '@/presentation/helper/http/h
 import { LoadSurveyController } from "./load-survey-controller"
 import { LoadSurvey, SurveyModel } from "./load-survey-controller-protocols"
 
-interface SutTypes {
+type SutTypes = {
     sut: LoadSurveyController
     loadSurveyStub: LoadSurvey
 }

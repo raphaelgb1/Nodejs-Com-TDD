@@ -4,7 +4,7 @@ import { forbbiden, responseOk, serverError } from "../helper/http/httpHelper"
 import { AuthMiddleware } from "./auth-middleware"
 import { HttpRequest, LoadAccountByToken } from './auth-middleware.protocols'
 
-interface SutTypes {
+type SutTypes = {
     sut: AuthMiddleware
     loadAccountByTokenStub: LoadAccountByToken
 }
