@@ -1,4 +1,4 @@
-export interface SurveyModel {
+export interface SurveyResultModel {
     id: String
     surveyId: String
     accountId: String
