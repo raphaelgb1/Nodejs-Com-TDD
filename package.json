@@ -1,6 +1,6 @@
 {
   "name": "node-com-tdd",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "",
   "main": "index.ts",
   "scripts": {
@@ -15,7 +15,8 @@
     "test:integration": "npm test -- --watch -c jest-integration-config.ts",
     "test:staged": "npm test --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
+    "local": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
