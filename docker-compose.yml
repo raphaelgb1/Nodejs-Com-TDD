@@ -14,6 +14,8 @@ services:
     restart: always
     image: node-com-tdd
     command: npm run debug
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/clean-node-api
     volumes:
       - ./dist:/usr/src/node-com-tdd/dist
       - ./node_modules:/usr/src/node-com-tdd/node_modules
