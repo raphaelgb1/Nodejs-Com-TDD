@@ -1,4 +1,4 @@
-import env from '../../../main/config/env'
+import env from '@/main/config/env'
 import { bcrypt } from '../bcrypt-validator/bcrypt-validator'
 import { BcryptAdapter } from './bcrypt-adapter'
 

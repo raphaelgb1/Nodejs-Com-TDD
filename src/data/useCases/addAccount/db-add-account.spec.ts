@@ -1,5 +1,5 @@
 /* eslint-disable no-trailing-spaces */
-import { Hasher } from "../../protocols/criptografy/hasher"
+import { Hasher } from "@/data/protocols/criptografy/hasher"
 import { LoadAccountByEmailRepository } from "../authentication/db-authentication-protocols"
 import { DBbAddAccount } from "./db-add-account"
 import { AccountModel, AddAccountModel, AddAccountRepository } from "./db-add-account-protocols"

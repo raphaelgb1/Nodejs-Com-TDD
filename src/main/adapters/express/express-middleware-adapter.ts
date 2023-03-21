@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { Controller, HttpRequest } from "../../../presentation/protocols"
+import { Controller, HttpRequest } from "@/presentation/protocols"
 
 export const adaptMiddleware = async (controller: Controller): Promise<any> => {
     const anyFunction = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

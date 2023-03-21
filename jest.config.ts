@@ -1,8 +1,7 @@
 export default {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.ts',
-  '!<rootDir>/src/main/**'
+    '<rootDir>/src/**/*.ts'
   ],
   coverageDirectory: 'coverage',
   testEnvironment: "node",
@@ -10,4 +9,7 @@ export default {
   transform: {
     '.+\\.ts$': 'ts-jest'
   },
+  moduleNameMapper: {
+    '@/(.*)': '<rootDir>/src/$1'
+  }
 };

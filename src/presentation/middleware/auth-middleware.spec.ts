@@ -1,4 +1,4 @@
-import { AccountModel } from "../../domain/models/account"
+import { AccountModel } from "@/domain/models/account"
 import { AccessDeniedError } from "../errors/access-denial-error"
 import { forbbiden, responseOk, serverError } from "../helper/http/httpHelper"
 import { AuthMiddleware } from "./auth-middleware"

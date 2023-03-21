@@ -1,5 +1,5 @@
 import MockDate from 'mockdate'
-import { badRequest, noContent, serverError } from "../../../helper/http/httpHelper"
+import { badRequest, noContent, serverError } from "@/presentation/helper/http/httpHelper"
 import { AddSurveyController } from "./add-survey-controller"
 import { AddSurvey, AddSurveyModel, HttpRequest, Validation } from "./add-survey-controller-protocols"
 

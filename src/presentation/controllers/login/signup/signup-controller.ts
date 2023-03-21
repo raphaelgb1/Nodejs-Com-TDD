@@ -1,6 +1,6 @@
 /* eslint-disable padded-blocks */
-import { EmailInUseError } from '../../../errors'
-import { badRequest, forbbiden, responseOk, serverError } from '../../../helper/http/httpHelper'
+import { EmailInUseError } from '@/presentation/errors'
+import { badRequest, forbbiden, responseOk, serverError } from '@/presentation/helper/http/httpHelper'
 import { Authentication } from '../login/login-controller-protocols'
 import { AddAccount, Controller, HttpRequest, HttpResponse, Validation } from './signup-controller-protocols'
 

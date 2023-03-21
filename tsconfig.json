@@ -6,8 +6,11 @@
       "esModuleInterop": true,
       "sourceMap": false,
       "strictNullChecks": true,
-      "rootDir": "src"
+      "rootDir": "src",
+      "baseUrl": "src",
+      "paths": {
+        "@/*": ["*"]
+      }
     },
-    "include": ["src"],
-    "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+    "include": ["src"]
 }

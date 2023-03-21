@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { Controller, HttpRequest } from "../../../presentation/protocols"
+import { Controller, HttpRequest } from "@/presentation/protocols"
 
 export const adaptRoute = async (controller: Controller): Promise<any> => {
     const anyFunction = async (req: Request, res: Response): Promise<void> => {
