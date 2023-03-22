@@ -1,4 +1,4 @@
-import { LoadAccountByToken, Decrypter, LoadAccountByTokenRepository, AccountModel } from "./db-load-account-by-token-protocols"
+import { AccountModel, Decrypter, LoadAccountByToken, LoadAccountByTokenRepository } from "./db-load-account-by-token-protocols"
 export class DbLoadAccountByToken implements LoadAccountByToken {
     constructor (
         private readonly decrypter: Decrypter,
@@ -13,6 +13,6 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
                 return account
             }
         }
-        return null as any
+        return null as unknown as AccountModel
     }
 }

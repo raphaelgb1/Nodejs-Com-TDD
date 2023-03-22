@@ -16,6 +16,6 @@ export class DBbAddAccount implements AddAccount {
             const account = await this.addAccountRepository.add({ ...accountData, password: hashedPassword })
             return account
         }
-        return null as any as AccountModel
+        return null as unknown as AccountModel
     }
 }
