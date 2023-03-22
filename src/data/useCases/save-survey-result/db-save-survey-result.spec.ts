@@ -1,8 +1,6 @@
-import { SaveSurveyResultRespository } from '@/data/protocols/db/survey/save-survey-result-repository'
-import { SurveyResultModel } from '@/domain/models/survey-result'
-import { SaveSurveyResultModel } from '@/domain/useCases/save-survey-result'
 import MockDate from 'mockdate'
 import { DbSaveSurveyResult } from "./db-save-survey-result"
+import { SaveSurveyResultModel, SaveSurveyResultRespository, SurveyResultModel } from "./db-save-survey-result-protocols"
 
 interface SutTypes {
     sut: DbSaveSurveyResult
