@@ -5,17 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "node-terminal",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Local Debugger",
             "skipFiles": [
                 "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/src/main/server.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            ]
+            ,"command": "npm run local",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
-            ]
+            ],
         },
         {
             "type": "node-terminal",
