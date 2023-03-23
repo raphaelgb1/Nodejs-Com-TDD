@@ -13,7 +13,7 @@ const makeFakeSurvey = (): AddSurveyModel => ({
         answer: 'any_answer'
     },
     {
-        answer: 'any_answer'
+        answer: 'any_answer_teste'
     }],
     date: new Date()
 })
@@ -25,10 +25,10 @@ const makeFakeAccount = (): AccountModel => ({
     password: 'valid_password'
 })
 
-const makeFakeSurveyResult = (survey, account): SaveSurveyResultModel => ({
+const makeFakeSurveyResult = (survey, account, indice = 0): SaveSurveyResultModel => ({
     surveyId: survey.insertedId,
     accountId: account.insertedId,
-    answer: 'any_answer',
+    answer: makeFakeSurvey().answers[indice].answer,
     date: new Date()
 })
 
@@ -83,6 +83,19 @@ describe('Survey Mongo Repository', () => {
             expect(result).toBeTruthy()
             expect(result.id).toBeTruthy()
             expect(result.answer).toBeTruthy()
+        })
+
+        test('Should update survey result if its not new', async () => {
+            const sut = makeSut()
+            const survey = await makeSurvey()
+            const account = await makeAccount()
+            const fakeRequest = await makeFakeSurveyResult(survey, account, 1)
+            const createSurvey = await collections.surveyResults.insertOne(makeFakeSurveyResult(survey, account))
+            const result = await sut.save(fakeRequest)
+            const result2 = await collections.survey.findOne
+            expect(result).toBeTruthy()
+            expect(result.id).toEqual(createSurvey.insertedId.toString())
+            expect(result.answer).toBe(createSurvey2.answer)
         })
     })
 })

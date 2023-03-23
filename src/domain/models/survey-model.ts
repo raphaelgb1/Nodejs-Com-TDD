@@ -1,5 +1,5 @@
 export type SurveyModel = {
-    id: String
+    id: string
     question: string
     answers: SurveyAnswerModel[]
     date: Date
