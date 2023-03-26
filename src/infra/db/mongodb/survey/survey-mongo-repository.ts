@@ -1,4 +1,4 @@
-import { AddSurveyModel } from '@/data/useCases/add-survey/db-add-survey-protocols'
+import { AddSurveyModel } from '@/data/useCases/survey/add-survey/db-add-survey-protocols'
 import { SurveyModel } from '@/domain/models/survey-model'
 import { ObjectId } from 'mongodb'
 import { SurveyMongoSignature } from '../../interfaces/survey-mongo-signature'
