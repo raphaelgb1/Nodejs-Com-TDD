@@ -13,12 +13,12 @@ export class SurveyMongoRepository implements SurveyMongoSignature {
     async loadAll (): Promise<SurveyModel[]> {
         const surveyCollections = await MongoHelper.getCollection('surveys')
         const surveys = await surveyCollections.find().toArray()
-        return surveys as unknown as SurveyModel[]
+        return MongoHelper.mapperCollection(surveys)
     }
 
     async loadById (id: string): Promise<SurveyModel> {
         const surveyCollections = await MongoHelper.getCollection('surveys')
         const surveys = await surveyCollections.findOne({ _id: new ObjectId(id) })
-        return surveys as unknown as SurveyModel
+        return surveys && MongoHelper.mapper(surveys)
     }
 }

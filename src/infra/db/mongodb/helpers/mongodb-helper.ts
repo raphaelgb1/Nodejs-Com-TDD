@@ -30,5 +30,9 @@ export const MongoHelper = {
             result[element[0]] = element[1]
         }
         return result
+    },
+
+    mapperCollection (collection: any[]): any[] {
+        return collection.map(data => MongoHelper.mapper(data))
     }
 }
