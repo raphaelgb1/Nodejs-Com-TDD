@@ -1,5 +1,5 @@
 import { DbLoadSurvey } from "@/data/useCases/survey/load-survey/db-load-survey"
-import { LoadSurvey } from "@/domain/useCases/load-survey"
+import { LoadSurvey } from "@/domain/useCases/survey/load-survey"
 import { SurveyMongoRepository } from "@/infra/db/mongodb/survey/survey-mongo-repository"
 
 export const makeDbLoadSurvey = (): LoadSurvey => {

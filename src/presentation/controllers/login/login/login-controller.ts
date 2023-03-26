@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/return-await */
-import { Authentication, AuthenticationModel } from "@/domain/useCases/authentication"
+import { Authentication, AuthenticationModel } from "@/domain/useCases/account/authentication"
 import { badRequest, responseOk, serverError, unauthorized } from "@/presentation/helper/http/httpHelper"
 import { Controller, HttpRequest, Validation } from "../signup/signup-controller-protocols"
 

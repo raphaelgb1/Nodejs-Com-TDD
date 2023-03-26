@@ -1,5 +1,5 @@
 import { AccountModel } from '@/domain/models/account'
-import { AddAccountModel } from '@/domain/useCases/add-account'
+import { AddAccountModel } from '@/domain/useCases/account/add-account'
 import { ObjectId } from 'mongodb'
 import { AccountMongoSignature } from '../../interfaces/account-mongo-signature'
 import { MongoHelper } from '../helpers/mongodb-helper'
