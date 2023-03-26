@@ -92,10 +92,10 @@ describe('Survey Mongo Repository', () => {
             const fakeRequest = await makeFakeSurveyResult(survey, account, 1)
             const createSurvey = await collections.surveyResults.insertOne(makeFakeSurveyResult(survey, account))
             const result = await sut.save(fakeRequest)
-            const result2 = await collections.survey.findOne
+            const result2 = await collections.surveyResults.findOne({ _id: createSurvey.insertedId })
             expect(result).toBeTruthy()
             expect(result.id).toEqual(createSurvey.insertedId.toString())
-            expect(result.answer).toBe(createSurvey2.answer)
+            expect(result.answer).toBe(result2?.answer)
         })
     })
 })
