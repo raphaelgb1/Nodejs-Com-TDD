@@ -1,5 +1,5 @@
 import { SurveyResultModel } from "@/domain/models/survey-result"
-import { throwError } from "@/domain/test/test-helpers"
+import { throwError } from "@/domain/test"
 import { InvalidParamError } from "@/presentation/errors"
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from "./save-survey-result-controller"

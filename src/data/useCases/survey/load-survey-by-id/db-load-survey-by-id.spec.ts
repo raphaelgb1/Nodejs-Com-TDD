@@ -1,4 +1,4 @@
-import { throwError } from "@/domain/test/test-helpers"
+import { throwError } from "@/domain/test"
 import MockDate from "mockdate"
 import { DbLoadSurveyById } from "./db-load-survey-by-id"
 import { LoadSurveyByIdRepository, SurveyModel } from "./db-load-survey-by-id.-protocols"
