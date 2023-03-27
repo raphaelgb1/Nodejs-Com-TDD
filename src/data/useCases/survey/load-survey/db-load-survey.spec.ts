@@ -1,3 +1,4 @@
+import { mockArrSurveyData } from "@/domain/test"
 import { throwError } from "@/domain/test/test-helpers"
 import MockDate from "mockdate"
 import { DbLoadSurvey } from "./db-load-survey"
@@ -11,7 +12,7 @@ interface SutTypes {
 const makeLoadSurveyRepositoryStub = (): LoadSurveyRepository => {
     class LoadSurveyRepositoryStub implements LoadSurveyRepository {
         async loadAll (): Promise<SurveyModel[]> {
-            return await Promise.resolve(makeFakeSurvey())
+            return await Promise.resolve(mockArrSurveyData())
         }
     }
 
@@ -25,18 +26,6 @@ const makeSut = (): SutTypes => {
         sut,
         loadSurveyRepositoryStub
     }
-}
-
-const makeFakeSurvey = (): SurveyModel[] => {
-    return [{
-        id: 'any_id',
-        question: 'any_question',
-        answers: [{
-            image: 'any_image',
-            answer: 'any_answer'
-        }],
-        date: new Date()
-    }]
 }
 
 describe('Db Load Survey', () => {
@@ -57,7 +46,7 @@ describe('Db Load Survey', () => {
     test('Should return a list of Surveys on success', async () => {
         const { sut } = makeSut()
         const surveys = await sut.load()
-        expect(surveys).toEqual(makeFakeSurvey())
+        expect(surveys).toEqual(mockArrSurveyData())
     })
 
     test('Should Throws if Surveys Repository throws', async () => {

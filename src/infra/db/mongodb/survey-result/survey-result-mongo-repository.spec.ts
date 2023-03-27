@@ -1,28 +1,15 @@
 import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey-model'
-import { mockAccountModel } from '@/domain/test'
+import { mockAccountModel, mockSurveyData } from '@/domain/test'
 import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result'
-import { AddSurveyModel } from '@/domain/useCases/survey/add-survey'
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongodb-helper'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 
-const makeFakeSurvey = (): AddSurveyModel => ({
-    question: 'any_question',
-    answers: [{
-        image: 'image',
-        answer: 'any_answer'
-    },
-    {
-        answer: 'any_answer_teste'
-    }],
-    date: new Date()
-})
-
-const makeFakeSurveyResult = (survey, account, indice = 0): SaveSurveyResultParams => ({
+const mockSurveyDataResult = (survey, account, indice = 0): SaveSurveyResultParams => ({
     surveyId: survey.insertedId,
     accountId: account.insertedId,
-    answer: makeFakeSurvey().answers[indice].answer,
+    answer: mockSurveyData().answers[0].answer,
     date: new Date()
 })
 
@@ -39,7 +26,7 @@ const makeSut = (): SurveyResultMongoRepository => {
 }
 
 const makeSurvey = async (): Promise<SurveyModel> => {
-    const result = await collections.survey.insertOne(makeFakeSurvey())
+    const result = await collections.survey.insertOne(mockSurveyData())
     return result as unknown as SurveyModel
 }
 
@@ -73,7 +60,7 @@ describe('Survey Mongo Repository', () => {
             const sut = makeSut()
             const survey = await makeSurvey()
             const account = await makeAccount()
-            const result = await sut.save(makeFakeSurveyResult(survey, account))
+            const result = await sut.save(mockSurveyDataResult(survey, account))
             expect(result).toBeTruthy()
             expect(result.id).toBeTruthy()
             expect(result.answer).toBeTruthy()
@@ -83,8 +70,8 @@ describe('Survey Mongo Repository', () => {
             const sut = makeSut()
             const survey = await makeSurvey()
             const account = await makeAccount()
-            const fakeRequest = await makeFakeSurveyResult(survey, account, 1)
-            const createSurvey = await collections.surveyResults.insertOne(makeFakeSurveyResult(survey, account))
+            const fakeRequest = await mockSurveyDataResult(survey, account, 1)
+            const createSurvey = await collections.surveyResults.insertOne(mockSurveyDataResult(survey, account))
             const result = await sut.save(fakeRequest)
             const result2 = await collections.surveyResults.findOne({ _id: createSurvey.insertedId })
             expect(result).toBeTruthy()

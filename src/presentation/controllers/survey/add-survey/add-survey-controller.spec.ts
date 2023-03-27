@@ -1,5 +1,5 @@
-import MockDate from 'mockdate'
 import { badRequest, noContent, serverError } from "@/presentation/helper/http/httpHelper"
+import MockDate from 'mockdate'
 import { AddSurveyController } from "./add-survey-controller"
 import { AddSurvey, AddSurveyModel, HttpRequest, Validation } from "./add-survey-controller-protocols"
 
@@ -38,7 +38,7 @@ const makeSut = (): SutTypes => {
     }
 }
 
-const makeFakeSurvey = (): HttpRequest => ({
+const mockSurveyData = (): HttpRequest => ({
     body: {
         question: 'any_question',
         answers: [{
@@ -61,7 +61,7 @@ describe('Add Survey Controller', () => {
     test('Should Call Validation with correct values', async () => {
         const { sut, validationStub } = makeSut()
         const validateSpy = jest.spyOn(validationStub, 'validate')
-        const httpRequest = makeFakeSurvey()
+        const httpRequest = mockSurveyData()
         await sut.handle(httpRequest)
         expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
     })
@@ -69,7 +69,7 @@ describe('Add Survey Controller', () => {
     test('Should return 400 if Validation Fails', async () => {
         const { sut, validationStub } = makeSut()
         jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
-        const httpRequest = makeFakeSurvey()
+        const httpRequest = mockSurveyData()
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(badRequest(new Error()))
     })
@@ -77,7 +77,7 @@ describe('Add Survey Controller', () => {
     test('Should call AddSurvey with correct values', async () => {
         const { sut, addSurveyStub } = makeSut()
         const addSpy = jest.spyOn(addSurveyStub, 'add')
-        const httpRequest = makeFakeSurvey()
+        const httpRequest = mockSurveyData()
         await sut.handle(httpRequest)
         expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
     })
@@ -87,14 +87,14 @@ describe('Add Survey Controller', () => {
         jest.spyOn(addSurveyStub, 'add').mockReturnValueOnce(
             new Promise((resolve, reject) => reject(new Error())
         ))
-        const httpRequest = makeFakeSurvey()
+        const httpRequest = mockSurveyData()
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(serverError(new Error()))
     })
 
     test('Should return 204 on success', async () => {
         const { sut } = makeSut()
-        const httpRequest = makeFakeSurvey()
+        const httpRequest = mockSurveyData()
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(noContent())
     })

@@ -30,7 +30,7 @@ const makeFakeRequest = (): HttpRequest => ({
     accountId: 'any_account_id'
 })
 
-const makeFakeSurveyResult = (): SurveyResultModel => ({
+const mockSurveyDataResult = (): SurveyResultModel => ({
     id: 'valid_id',
     surveyId: 'valid_survey_id',
     accountId: 'valid_account_id',
@@ -38,7 +38,7 @@ const makeFakeSurveyResult = (): SurveyResultModel => ({
     answer: 'valid_answer'
 })
 
-const makeFakeSurveyResultCall = (): unknown => ({
+const mockSurveyDataResultCall = (): unknown => ({
     surveyId: 'any_survey_id',
     accountId: 'any_account_id',
     date: new Date(),
@@ -48,7 +48,7 @@ const makeFakeSurveyResultCall = (): unknown => ({
 const makeFakeLoadSurveyById = (): LoadSurveyById => {
     class LoadSurveyByIdStub implements LoadSurveyById {
         async loadBySurveyId (id: String): Promise<SurveyModel> {
-            return await Promise.resolve(makeFakeSurvey())
+            return await Promise.resolve(mockSurveyData())
         }
     }
 
@@ -58,13 +58,13 @@ const makeFakeLoadSurveyById = (): LoadSurveyById => {
 const makeSaveSurveyResultStub = (): SaveSurveyResult => {
     class SaveSurveyResultStub implements SaveSurveyResult {
         async save (data: SaveSurveyResultParams): Promise<SurveyResultModel> {
-            return await Promise.resolve(makeFakeSurveyResult())
+            return await Promise.resolve(mockSurveyDataResult())
         }
     }
     return new SaveSurveyResultStub()
 }
 
-const makeFakeSurvey = (): SurveyModel => ({
+const mockSurveyData = (): SurveyModel => ({
         id: 'any_id',
         question: 'any_question',
         answers: [{
@@ -115,7 +115,7 @@ describe('Save Survey Result Controller', () => {
         const { sut, saveSurveyResultStub } = makeSut()
         const spySave = jest.spyOn(saveSurveyResultStub, 'save')
         await sut.handle(makeFakeRequest())
-        expect(spySave).toHaveBeenCalledWith(makeFakeSurveyResultCall())
+        expect(spySave).toHaveBeenCalledWith(mockSurveyDataResultCall())
     })
 
     test('Should return 500 LoadSurveysById throws', async () => {
@@ -128,6 +128,6 @@ describe('Save Survey Result Controller', () => {
     test('Should return 200 on success', async () => {
         const { sut } = makeSut()
         const httpResponse = await sut.handle(makeFakeRequest())
-        expect(httpResponse).toEqual(responseOk(makeFakeSurveyResult()))
+        expect(httpResponse).toEqual(responseOk(mockSurveyDataResult()))
     })
 })

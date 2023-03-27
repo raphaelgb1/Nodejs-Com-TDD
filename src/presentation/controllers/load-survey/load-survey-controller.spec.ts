@@ -11,7 +11,7 @@ type SutTypes = {
 const makeLoadSurveyStub = (): LoadSurvey => {
     class LoadSurveyStub implements LoadSurvey {
         async load (): Promise<SurveyModel[]> {
-            return await Promise.resolve(makeFakeSurvey())
+            return await Promise.resolve(mockSurveyData())
         }
     }
 
@@ -27,7 +27,7 @@ const makeSut = (): SutTypes => {
     }
 }
 
-const makeFakeSurvey = (): SurveyModel[] => {
+const mockSurveyData = (): SurveyModel[] => {
     return [{
         id: 'any_id',
         question: 'any_question',
@@ -57,7 +57,7 @@ describe('Add Survey Controller', () => {
     test('Should return 200 on success', async () => {
         const { sut } = makeSut()
         const httpResponse = await sut.handle({})
-        expect(httpResponse).toEqual(responseOk(makeFakeSurvey()))
+        expect(httpResponse).toEqual(responseOk(mockSurveyData()))
     })
 
      test('Should return 204 if LoadSurveys return empty', async () => {

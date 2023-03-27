@@ -1,4 +1,4 @@
-import { mockAccountModel } from '@/domain/test'
+import { mockAccountModel, mockAuthentication } from '@/domain/test'
 import { EmailInUseError, MissingParamError } from '@/presentation/errors'
 import { ServerError } from '@/presentation/errors/serverError'
 import { badRequest, forbbiden, responseOk, serverError } from '@/presentation/helper/http/httpHelper'
@@ -57,16 +57,12 @@ const MakeSut = (): SutTypes => {
 const makeFakeRequest = (): HttpRequest => ({
     body: {
       name: 'any_name',
-      email: 'anyEmail@gmail.com',
+      email: 'any_email@gmail.com',
       password: 'any_password',
       passwordConfirmation: 'any_password'
     }
 })
 
-const makeFakeAuth = (): AuthenticationParams => ({
-    email: 'anyEmail@gmail.com',
-    password: 'any_password'
-})
 describe('SignUp Controller', () => {
     test('Should call AddAccount with correct values', async () => {
       const { sut, addAccountStub } = MakeSut()
@@ -75,7 +71,7 @@ describe('SignUp Controller', () => {
       await sut.handle(httpRequest)
       expect(addSpy).toHaveBeenCalledWith({
         name: 'any_name',
-        email: 'anyEmail@gmail.com',
+        email: 'any_email@gmail.com',
         password: 'any_password'
       })
     })
@@ -117,7 +113,7 @@ describe('SignUp Controller', () => {
       const { sut, authenticationStub } = MakeSut()
       const authSpy = jest.spyOn(authenticationStub, 'auth')
       await sut.handle(makeFakeRequest())
-      expect(authSpy).toHaveBeenCalledWith(makeFakeAuth())
+      expect(authSpy).toHaveBeenCalledWith(mockAuthentication())
   })
 
   test('Should return 500 if Authentication throws', async () => {
