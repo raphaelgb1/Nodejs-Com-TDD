@@ -21,7 +21,8 @@ const makeSut = (): SutTypes => {
 const makeFakeRequest = (): HttpRequest => ({
     params: {
         surveyId: 'any_survey_id'
-    }
+    },
+    body: { answer: 'wrong_answer' }
 })
 
 const makeFakeLoadSurveyById = (): LoadSurveyById => {
@@ -52,11 +53,11 @@ describe('Save Survey Result Controller', () => {
         expect(spyLoadById).toHaveBeenCalledWith(makeFakeRequest().params.surveyId)
     })
 
-    test('Should return 403 if LoadSurveyById with returns null', async () => {
+    test('Should return 403 if LoadSurveyById returns null', async () => {
         const { sut, loadSurveyByIdStub } = makeSut()
         jest.spyOn(loadSurveyByIdStub, 'loadBySurveyId').mockReturnValueOnce(Promise.resolve(null as any))
         const httpResponse = await sut.handle(makeFakeRequest())
-        expect(httpResponse).toEqual(forbbiden(new InvalidParamError('Invalid Survey Id')))
+        expect(httpResponse).toEqual(forbbiden(new InvalidParamError('survey id')))
     })
 
     test('Should return 500 LoadSurveysById throws', async () => {
@@ -66,5 +67,11 @@ describe('Save Survey Result Controller', () => {
         )
         const httpResponse = await sut.handle(makeFakeRequest())
         expect(httpResponse).toEqual(serverError(new Error()))
+    })
+
+    test('Should return 403 if invalid answer is provided', async () => {
+        const { sut } = makeSut()
+        const httpResponse = await sut.handle(makeFakeRequest())
+        expect(httpResponse).toEqual(forbbiden(new InvalidParamError('answer')))
     })
 })
