@@ -1,4 +1,5 @@
 import { SurveyResultModel } from "@/domain/models/survey-result"
+import { throwError } from "@/domain/test/test-helpers"
 import { InvalidParamError } from "@/presentation/errors"
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from "./save-survey-result-controller"
@@ -97,9 +98,7 @@ describe('Save Survey Result Controller', () => {
 
     test('Should return 500 LoadSurveysById throws', async () => {
         const { sut, loadSurveyByIdStub } = makeSut()
-        jest.spyOn(loadSurveyByIdStub, 'loadBySurveyId').mockReturnValueOnce(
-            Promise.reject(new Error())
-        )
+        jest.spyOn(loadSurveyByIdStub, 'loadBySurveyId').mockImplementationOnce(throwError)
         const httpResponse = await sut.handle(makeFakeRequest())
         expect(httpResponse).toEqual(serverError(new Error()))
     })
@@ -121,9 +120,7 @@ describe('Save Survey Result Controller', () => {
 
     test('Should return 500 LoadSurveysById throws', async () => {
         const { sut, saveSurveyResultStub } = makeSut()
-        jest.spyOn(saveSurveyResultStub, 'save').mockReturnValueOnce(
-            Promise.reject(new Error())
-        )
+        jest.spyOn(saveSurveyResultStub, 'save').mockImplementationOnce(throwError)
         const httpResponse = await sut.handle(makeFakeRequest())
         expect(httpResponse).toEqual(serverError(new Error()))
     })

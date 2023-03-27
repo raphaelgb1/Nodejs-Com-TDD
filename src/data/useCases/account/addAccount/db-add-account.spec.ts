@@ -63,7 +63,7 @@ describe('DBbAddAccount UseCase', () => {
   
   test('Should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
-    jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(Promise.reject(new Error()))
     const accountData = mockAccountModel(1)
     const promise = sut.add(accountData)
     await expect(promise).rejects.toThrow()
@@ -81,7 +81,7 @@ describe('DBbAddAccount UseCase', () => {
 
   test('Should throw if Hasher throws', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
-    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
     const accountData = mockAccountModel(1)
     const promise = sut.add(accountData)
     await expect(promise).rejects.toThrow()
@@ -105,9 +105,7 @@ describe('DBbAddAccount UseCase', () => {
   test('Should return null if Load Account Email Respository not return null', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     const data = mockAccountModel(1)
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
-      new Promise(resolve => resolve(data))
-    )
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.resolve(data))
     const account = await sut.add(data)
     expect(account).toBeNull()
   })
