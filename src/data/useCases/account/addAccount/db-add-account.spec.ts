@@ -1,10 +1,10 @@
 /* eslint-disable no-trailing-spaces */
 import { Hasher } from "@/data/protocols/criptografy/hasher"
-import { mockAddAccountRepository, mockHasher } from "@/data/test"
+import { mockAddAccountRepository, mockHasher, mockLoadAccountByEmailRepository } from "@/data/test"
 import { mockAccountModel } from "@/domain/test"
 import { LoadAccountByEmailRepository } from "../authentication/db-authentication-protocols"
 import { DBbAddAccount } from "./db-add-account"
-import { AccountModel, AddAccountRepository } from "./db-add-account-protocols"
+import { AddAccountRepository } from "./db-add-account-protocols"
 
 type SutTypes = {
   sut: DBbAddAccount
@@ -13,19 +13,10 @@ type SutTypes = {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
 }
 
-const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
-  class LoadAccountByEmailRespositoryStub implements LoadAccountByEmailRepository {
-      async loadByEmail (email: string): Promise<AccountModel> {
-          return await new Promise(resolve => resolve(null as any))
-      }
-  }
-  return new LoadAccountByEmailRespositoryStub()
-}
-
 const makeSut = (): SutTypes => {
   const hasherStub = mockHasher()
   const addAccountRepositoryStub = mockAddAccountRepository()
-  const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
   const sut = new DBbAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)
   return {
     sut,
