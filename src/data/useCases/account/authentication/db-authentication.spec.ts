@@ -1,4 +1,5 @@
 /* eslint-disable comma-style */
+import { mockEncrypter } from "@/data/test"
 import { mockAccountModel, mockAuthentication } from "@/domain/test"
 import { DbAuthentication } from "./db-authentication"
 import {
@@ -33,15 +34,6 @@ describe('DB Authentication UseCase', () => {
         return new HashCompareStub()
     }
 
-    const makeEncrypterStub = (): Encrypter => {
-        class EncrypterStub implements Encrypter {
-            async encrypt (value: string): Promise<string> {
-                return await new Promise(resolve => resolve(makeFakeToken().token))
-            }
-        }
-        return new EncrypterStub()
-    }
-
     const makeUpdateAccessToken = (): UpdateAccessTokenRepository => {
         class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
             async updateAccessToken (id: string, token: string): Promise<void> {
@@ -53,7 +45,7 @@ describe('DB Authentication UseCase', () => {
 
     const makeSut = (): SutTypes => {
         const updateAccessTokenRepositoryStub = makeUpdateAccessToken()
-        const encrypterStub = makeEncrypterStub()
+        const encrypterStub = mockEncrypter()
         const hashComparerStub = makeHashComparerStub()
         const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
         const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub, updateAccessTokenRepositoryStub)

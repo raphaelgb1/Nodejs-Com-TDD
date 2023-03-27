@@ -1,5 +1,6 @@
 /* eslint-disable no-trailing-spaces */
 import { Hasher } from "@/data/protocols/criptografy/hasher"
+import { mockHasher } from "@/data/test"
 import { mockAccountModel } from "@/domain/test"
 import { LoadAccountByEmailRepository } from "../authentication/db-authentication-protocols"
 import { DBbAddAccount } from "./db-add-account"
@@ -10,15 +11,6 @@ type SutTypes = {
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
-}
-
-const makeHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash (value: string): Promise<string> {
-        return await new Promise(resolve => resolve('hashed_password'))
-    }
-  }
-  return new HasherStub()
 }
 
 const makeLoadAccountStub = (): LoadAccountByEmailRepository => {
@@ -40,7 +32,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 }
 
 const makeSut = (): SutTypes => {
-  const hasherStub = makeHasher()
+  const hasherStub = mockHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const loadAccountByEmailRepositoryStub = makeLoadAccountStub()
   const sut = new DBbAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)

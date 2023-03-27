@@ -1,4 +1,5 @@
-import { mockAccountModel } from "@/domain/test"
+import { mockDecrypter } from "@/data/test"
+import { mockAccountModel, throwError } from "@/domain/test"
 import { DbLoadAccountByToken } from './db-load-account-by-token'
 import { AccountModel, Decrypter, LoadAccountByTokenRepository } from "./db-load-account-by-token-protocols"
 
@@ -6,15 +7,6 @@ interface SutTypes {
     sut: DbLoadAccountByToken
     decrypterStub: Decrypter
     loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository
-}
-
-const makeDecrypterStub = (): Decrypter => {
-    class DecrypterStub implements Decrypter {
-        async decrypt (value: string): Promise<string> {
-            return await Promise.resolve('any_value')
-        }
-    }
-    return new DecrypterStub()
 }
 
 const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
@@ -28,7 +20,7 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
 
 const makeSut = (role?: string): SutTypes => {
     const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository()
-    const decrypterStub = makeDecrypterStub()
+    const decrypterStub = mockDecrypter()
     const sut = new DbLoadAccountByToken(decrypterStub, loadAccountByTokenRepositoryStub)
     return {
         sut,
@@ -74,10 +66,10 @@ describe('Db Load Account by Token UseCase', () => {
         expect(httpResponse).toEqual(mockAccountModel(1))
     })
 
-    // test('Should return null if Load by Account by Token Repository returns null', async () => {
-    //     const { sut, decrypterStub } = makeSut()
-    //     jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => { throw new Error() })
-    //     const promise = await sut.load('any_token', role)
-    //     expect(promise).toThrow()
-    // })
+    test('Should return null if Load by Account by Token Repository returns null', async () => {
+        const { sut, decrypterStub } = makeSut()
+        jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(throwError)
+        const promise = sut.load('any_token', role)
+        await expect(promise).rejects.toThrow()
+    })
 })
