@@ -68,7 +68,7 @@ describe('Auth Middleware Presentation', () => {
         const { sut } = makeSut()
         const httpRequest = makeFakeRequest()
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse).toEqual(responseOk({ account_id: makeFakeAccount().id }))
+        expect(httpResponse).toEqual(responseOk({ accountId: makeFakeAccount().id }))
     })
 
     test('Should return 500 if LoadAccountByToken throws', async () => {
