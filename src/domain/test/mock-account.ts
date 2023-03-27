@@ -1,8 +1,5 @@
-import { AccountModel } from "../models/account"
-import { SurveyModel } from "../models/survey-model"
-import { AddAccountParams } from "../useCases/account/add-account"
-import { AuthenticationParams } from "../useCases/account/authentication"
-import { AddSurveyModel } from "../useCases/survey/add-survey"
+import { AccountModel } from "@/domain/models/account"
+import { AddAccountParams } from "@/domain/useCases/account/add-account"
 
 export const mockAccountModel = (type = 0): AccountModel => {
     const typeName = type === 0 ? 'any' : 'valid'
@@ -19,33 +16,3 @@ export const mockAccountParams = (): AddAccountParams => ({
     email: 'any_email@mail.com',
     password: 'any_password'
 })
-
-export const mockName = (): unknown => ({
-    name: 'Raphael'
-})
-
-export const mockAuthentication = (): AuthenticationParams => ({
-    email: 'any_email@gmail.com',
-    password: 'any_password'
-})
-
-export const mockSurveyData = (): AddSurveyModel => ({
-    question: 'any_question',
-    answers: [{
-        image: 'any_image',
-        answer: 'any_answer'
-    }],
-    date: new Date()
-})
-
-export const mockArrSurveyData = (): SurveyModel[] => {
-    return [{
-        id: 'any_id',
-        question: 'any_question',
-        answers: [{
-            image: 'any_image',
-            answer: 'any_answer'
-        }],
-        date: new Date()
-    }]
-}
