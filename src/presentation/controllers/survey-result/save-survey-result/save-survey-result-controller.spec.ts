@@ -2,7 +2,7 @@ import { SurveyResultModel } from "@/domain/models/survey-result"
 import { InvalidParamError } from "@/presentation/errors"
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from "./save-survey-result-controller"
-import { forbbiden, HttpRequest, LoadSurveyById, responseOk, SaveSurveyResult, SaveSurveyResultModel, serverError, SurveyModel } from "./save-survey-result-controller-protocols"
+import { forbbiden, HttpRequest, LoadSurveyById, responseOk, SaveSurveyResult, SaveSurveyResultParams, serverError, SurveyModel } from "./save-survey-result-controller-protocols"
 
 type SutTypes = {
     sut: SaveSurveyResultController
@@ -56,7 +56,7 @@ const makeFakeLoadSurveyById = (): LoadSurveyById => {
 
 const makeSaveSurveyResultStub = (): SaveSurveyResult => {
     class SaveSurveyResultStub implements SaveSurveyResult {
-        async save (data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+        async save (data: SaveSurveyResultParams): Promise<SurveyResultModel> {
             return await Promise.resolve(makeFakeSurveyResult())
         }
     }

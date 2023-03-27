@@ -1,11 +1,11 @@
 import { AccountModel } from '@/domain/models/account'
-import { AddAccountModel } from '@/domain/useCases/account/add-account'
+import { AddAccountParams } from '@/domain/useCases/account/add-account'
 import { ObjectId } from 'mongodb'
 import { AccountMongoSignature } from '../../interfaces/account-mongo-signature'
 import { MongoHelper } from '../helpers/mongodb-helper'
 
 export class AccountMongoRepository implements AccountMongoSignature {
-    async add (accountData: AddAccountModel): Promise<AccountModel> {
+    async add (accountData: AddAccountParams): Promise<AccountModel> {
         const accountCollection = await MongoHelper.getCollection('accounts')
         const insert = await accountCollection.insertOne(accountData)
         const get = await accountCollection.findOne(insert.insertedId)

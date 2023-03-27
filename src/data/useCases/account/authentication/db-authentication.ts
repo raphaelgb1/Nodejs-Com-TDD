@@ -1,9 +1,6 @@
 import {
     Authentication,
-    AuthenticationModel,
-    HashComparer,
-    Encrypter,
-    LoadAccountByEmailRepository,
+    AuthenticationParams, Encrypter, HashComparer, LoadAccountByEmailRepository,
     UpdateAccessTokenRepository
 } from "./db-authentication-protocols"
 
@@ -13,7 +10,7 @@ import {
         private readonly encrypter: Encrypter,
         private readonly updateAccessTokenRepository: UpdateAccessTokenRepository) {}
 
-    async auth (authentication: AuthenticationModel): Promise<any> {
+    async auth (authentication: AuthenticationParams): Promise<any> {
         const account = await this.loadAccountByEmailRepository.loadByEmail(authentication.email)
         if (account) {
             const isValid = await this.hashComparer.compare(authentication.password, account.password)

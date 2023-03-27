@@ -1,13 +1,13 @@
 import { EmailInUseError, MissingParamError } from '@/presentation/errors'
 import { ServerError } from '@/presentation/errors/serverError'
 import { badRequest, forbbiden, responseOk, serverError } from '@/presentation/helper/http/httpHelper'
-import { Authentication, AuthenticationModel } from '../login/login-controller-protocols'
+import { Authentication, AuthenticationParams } from '../login/login-controller-protocols'
 import { SignUpController } from './signup-controller'
-import { AccountModel, AddAccount, AddAccountModel, HttpRequest, Validation } from './signup-controller-protocols'
+import { AccountModel, AddAccount, AddAccountParams, HttpRequest, Validation } from './signup-controller-protocols'
 
 const MakeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountModel): Promise<AccountModel> {
+    async add (account: AddAccountParams): Promise<AccountModel> {
       const fakeAccount = makeFakeAccount()
       return await new Promise(resolve => resolve(fakeAccount))
     }
@@ -26,7 +26,7 @@ const MakeValidation = (): Validation => {
 
 const MakeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-      async auth (authentication: AuthenticationModel): Promise<string> {
+      async auth (authentication: AuthenticationParams): Promise<string> {
           return await new Promise(resolve => resolve('any_token'))
       }
   }
@@ -70,7 +70,7 @@ const makeFakeRequest = (): HttpRequest => ({
     }
 })
 
-const makeFakeAuth = (): AuthenticationModel => ({
+const makeFakeAuth = (): AuthenticationParams => ({
     email: 'anyEmail@gmail.com',
     password: 'any_password'
 })

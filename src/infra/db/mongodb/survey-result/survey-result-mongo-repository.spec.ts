@@ -1,6 +1,6 @@
 import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey-model'
-import { SaveSurveyResultModel } from '@/domain/useCases/survey-result/save-survey-result'
+import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result'
 import { AddSurveyModel } from '@/domain/useCases/survey/add-survey'
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongodb-helper'
@@ -25,7 +25,7 @@ const makeFakeAccount = (): AccountModel => ({
     password: 'valid_password'
 })
 
-const makeFakeSurveyResult = (survey, account, indice = 0): SaveSurveyResultModel => ({
+const makeFakeSurveyResult = (survey, account, indice = 0): SaveSurveyResultParams => ({
     surveyId: survey.insertedId,
     accountId: account.insertedId,
     answer: makeFakeSurvey().answers[indice].answer,

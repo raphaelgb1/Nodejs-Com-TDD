@@ -1,13 +1,9 @@
 /* eslint-disable comma-style */
-import {
-    AuthenticationModel,
-    HashComparer,
-    Encrypter,
-    LoadAccountByEmailRepository,
-    UpdateAccessTokenRepository,
-    AccountModel
-} from "./db-authentication-protocols"
 import { DbAuthentication } from "./db-authentication"
+import {
+    AccountModel, AuthenticationParams, Encrypter, HashComparer, LoadAccountByEmailRepository,
+    UpdateAccessTokenRepository
+} from "./db-authentication-protocols"
 
 describe('DB Authentication UseCase', () => {
     type SutTypes = {
@@ -80,7 +76,7 @@ describe('DB Authentication UseCase', () => {
         , password: 'hashed_password'
     })
 
-    const makeFakeAuth = (): AuthenticationModel => {
+    const makeFakeAuth = (): AuthenticationParams => {
         const email = 'any_email@gmail.com'
         const password = 'any_password'
         return { email, password }
