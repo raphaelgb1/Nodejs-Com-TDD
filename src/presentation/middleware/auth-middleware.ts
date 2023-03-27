@@ -14,7 +14,7 @@ export class AuthMiddleware implements Controller {
             if (accessToken) {
                 const account = await this.loadAccountByToken.load(accessToken, this.role)
                 if (account) {
-                    return responseOk({ account_id: account.id })
+                    return responseOk({ accountId: account.id })
                 }
             }
             return forbbiden(new AccessDeniedError())
