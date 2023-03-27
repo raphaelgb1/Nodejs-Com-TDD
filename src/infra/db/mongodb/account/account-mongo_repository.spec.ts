@@ -1,14 +1,7 @@
+import { mockAccountModel } from '@/domain/test'
 import { Collection } from 'mongodb'
-import { AccountModel } from '@/domain/models/account'
 import { MongoHelper } from '../helpers/mongodb-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
-
-const makeFakeAccount = (): AccountModel => ({
-    id: 'valid_id',
-    name: 'any_name',
-    email: 'any_email@email.com',
-    password: 'any_password'
-})
 
 let accountCollection: Collection
 
@@ -35,7 +28,7 @@ describe('Account Mongo Repository', () => {
     describe('Add - Account Mongo Repository', () => {
         test('Should return an account on add success', async () => {
             const sut = makeSut()
-            const account = await sut.add(makeFakeAccount())
+            const account = await sut.add(mockAccountModel())
 
             expect(account).toBeTruthy()
             expect(account.id).toBeTruthy()
@@ -53,7 +46,7 @@ describe('Account Mongo Repository', () => {
                 email: 'any_email@email.com',
                 password: 'any_password'
             })
-            const account = await sut.loadByEmail(makeFakeAccount().email)
+            const account = await sut.loadByEmail(mockAccountModel().email)
 
             expect(account).toBeTruthy()
             expect(account.id).toBeTruthy()
@@ -64,7 +57,7 @@ describe('Account Mongo Repository', () => {
 
         test('Should return null if load by EMAIL fails', async () => {
             const sut = makeSut()
-            const account = await sut.loadByEmail(makeFakeAccount().email)
+            const account = await sut.loadByEmail(mockAccountModel().email)
             expect(account).toBeFalsy()
         })
     })

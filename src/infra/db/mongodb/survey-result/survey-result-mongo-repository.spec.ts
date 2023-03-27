@@ -1,5 +1,6 @@
 import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey-model'
+import { mockAccountModel } from '@/domain/test'
 import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result'
 import { AddSurveyModel } from '@/domain/useCases/survey/add-survey'
 import { Collection } from 'mongodb'
@@ -16,13 +17,6 @@ const makeFakeSurvey = (): AddSurveyModel => ({
         answer: 'any_answer_teste'
     }],
     date: new Date()
-})
-
-const makeFakeAccount = (): AccountModel => ({
-    id: 'valid_id',
-    name: 'valid_name',
-    email: 'valid_email@email.com',
-    password: 'valid_password'
 })
 
 const makeFakeSurveyResult = (survey, account, indice = 0): SaveSurveyResultParams => ({
@@ -50,7 +44,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
 }
 
 const makeAccount = async (): Promise<AccountModel> => {
-    const result = await collections.account.insertOne(makeFakeAccount())
+    const result = await collections.account.insertOne(mockAccountModel())
     return result as unknown as AccountModel
 }
 

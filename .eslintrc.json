@@ -10,7 +10,8 @@
         "@typescript-eslint/method-signature-style": "off",
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/no-invalid-void-type": "off",
-        "@typescript-eslint/consistent-type-definitions": "off"
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/semi": "off"
     }
     
 }
