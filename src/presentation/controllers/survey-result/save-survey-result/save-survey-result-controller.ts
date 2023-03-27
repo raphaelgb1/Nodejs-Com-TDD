@@ -1,5 +1,5 @@
 import { InvalidParamError } from "@/presentation/errors"
-import { forbbiden, serverError } from "@/presentation/helper/http/httpHelper"
+import { forbbiden, responseOk, serverError } from "@/presentation/helper/http/httpHelper"
 import { Controller, HttpRequest, HttpResponse, LoadSurveyById, SaveSurveyResult } from "./save-survey-result-controller-protocols"
 
 export class SaveSurveyResultController implements Controller {
@@ -20,13 +20,13 @@ export class SaveSurveyResultController implements Controller {
             } else {
                 return forbbiden(new InvalidParamError('survey id'))
             }
-            await this.saveSurveyResul.save({
+            const surveyResult = await this.saveSurveyResul.save({
                 accountId,
                 surveyId,
                 date: new Date(),
                 answer
             })
-            return null
+            return responseOk(surveyResult)
         } catch (error) {
             return serverError(error)
         }
