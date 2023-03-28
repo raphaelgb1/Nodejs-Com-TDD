@@ -3,7 +3,7 @@ import { AddSurveyModel } from "@/data/useCases/survey/add-survey/db-add-survey-
 import { mockArrSurveyData, mockSurveyModel } from "@/domain/test"
 import { LoadSurveyRepository } from "@/data/protocols/db/survey/load-survey-repository"
 import { LoadSurveyByIdRepository } from "@/data/protocols/db/survey/load-survey-by-id-repository"
-import { SurveyModel } from "../useCases/survey/load-survey/db-load-surveys-protocols"
+import { SurveyModel } from "@/data/useCases/survey/load-survey/db-load-surveys-protocols"
 
 export const mockAddSurveyRepository = (): AddSurveyRepository => {
     class AddSurveyRepository implements AddSurveyRepository {

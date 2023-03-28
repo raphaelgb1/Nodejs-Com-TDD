@@ -1,4 +1,4 @@
-import { mockAddSurveyRepository } from '@/data/test/mock-db-survey'
+import { mockAddSurveyRepository } from '@/data/test'
 import { mockSurveyData } from '@/domain/test'
 import MockDate from 'mockdate'
 import { DbAddSurvey } from "./db-add-survey"

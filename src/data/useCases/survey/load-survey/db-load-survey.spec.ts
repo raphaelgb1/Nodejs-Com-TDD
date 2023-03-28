@@ -1,4 +1,4 @@
-import { mockLoadSurveyRepository } from "@/data/test/mock-db-survey"
+import { mockLoadSurveyRepository } from "@/data/test"
 import { mockArrSurveyData, throwError } from "@/domain/test"
 import MockDate from "mockdate"
 import { DbLoadSurvey } from "./db-load-survey"
