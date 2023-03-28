@@ -1,4 +1,3 @@
-
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { Validation } from '@/presentation/protocols'
 import { ValidationComposite } from "./validation-composite"
@@ -27,14 +26,12 @@ describe('Validation Composite', () => {
         return new ValidationStub()
     }
 
-    const makeFakeRequest = (): any => ({
-        field: 'any_value'
-    })
+    const field = { field: 'any_value' }
 
     test('Should return an error if any validation fails', () => {
         const { sut, validationStubs } = makeSut()
         jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new MissingParamError('field'))
-        const error = sut.validate(makeFakeRequest())
+        const error = sut.validate(field)
         expect(error).toEqual(new MissingParamError('field'))
     })
 
@@ -42,13 +39,13 @@ describe('Validation Composite', () => {
         const { sut, validationStubs } = makeSut()
         jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(new InvalidParamError('field'))
         jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(new MissingParamError('field'))
-        const error = sut.validate(makeFakeRequest())
+        const error = sut.validate(field)
         expect(error).toEqual(new InvalidParamError('field'))
     })
 
     test('Should not return if validation succeeds', () => {
         const { sut } = makeSut()
-        const error = sut.validate(makeFakeRequest())
+        const error = sut.validate(field)
         expect(error).toBeFalsy()
     })
 })
